@@ -28,9 +28,7 @@
 	},
 	"autoload-dev": {
 		"files": [
-			"tests/integration/UrlLinkerTestCase.php",
-			"tests/integration/functions/LinkUrlsInTrustedHtmlTest.php",
-			"tests/integration/functions/HtmlEscapeAndLinkUrlsTest.php"
+			"tests/integration/UrlLinkerTestCase.php"
 		]
 	}
 }

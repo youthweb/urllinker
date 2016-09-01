@@ -3,16 +3,6 @@
 abstract class UrlLinkerTestCase extends \PHPUnit_Framework_TestCase
 {
 	/**
-	 * @dataProvider provideTextsNotContainingAnyUrls
-	 *
-	 * @param string $text
-	 */
-	public function testTextNotContainingAnyUrlsRemainsTheSame($text)
-	{
-		$this->assertSame($text, $this->linkify($text));
-	}
-
-	/**
 	 * @return array
 	 */
 	public function provideTextsNotContainingAnyUrls()
@@ -141,10 +131,4 @@ abstract class UrlLinkerTestCase extends \PHPUnit_Framework_TestCase
 	{
 		return sprintf('<a href="%s">%s</a>', $href, $content);
 	}
-
-	/**
-	 * @param string
-	 * @return string
-	 */
-	abstract protected function linkify($text);
 }
