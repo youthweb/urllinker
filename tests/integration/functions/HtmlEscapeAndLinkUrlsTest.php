@@ -2,9 +2,9 @@
 
 class HtmlEscapeAndLinkUrlsTest extends UrlLinkerTestCase
 {
-    public function testExample()
-    {
-        $text = <<<EOD
+	public function testExample()
+	{
+		$text = <<<EOD
 Here's an e-mail-address:bob+test@example.org. Here's an authenticated URL: http://skroob:12345@example.com.
 Here are some URLs:
 stackoverflow.com/questions/1188129/pregreplace-to-detect-html-php
@@ -25,7 +25,7 @@ We need to support IDNs and IRIs and röck döts:
 møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي.
 EOD;
 
-        $expected = <<<EOD
+		$expected = <<<EOD
 Here's an e-mail-address:<a href="mailto:bob+test&#64;example.org">bob+test&#64;example.org</a>. Here's an authenticated URL: <a href="http://skroob:12345&#64;example.com">example.com</a>.
 Here are some URLs:
 <a href="http://stackoverflow.com/questions/1188129/pregreplace-to-detect-html-php">stackoverflow.com/questions/1188129/pregreplace-to-detect-html-php</a>
@@ -46,44 +46,44 @@ We need to support IDNs and IRIs and röck döts:
 <a href="http://møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي">møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي</a>.
 EOD;
 
-        $this->assertSame($expected, $this->linkify($text));
-    }
+		$this->assertSame($expected, $this->linkify($text));
+	}
 
-    /**
-     * @dataProvider provideTextsWithLinksWithoutHtml
-     *
-     * @param string      $text
-     * @param string      $expectedLinked
-     * @param string|null $message
-     */
-    public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null)
-    {
-        $this->assertSame(
-            $expectedLinked,
-            $this->linkify($text),
-            'Simple case: '.$message
-        );
+	/**
+	 * @dataProvider provideTextsWithLinksWithoutHtml
+	 *
+	 * @param string	  $text
+	 * @param string	  $expectedLinked
+	 * @param string|null $message
+	 */
+	public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+	{
+		$this->assertSame(
+			$expectedLinked,
+			$this->linkify($text),
+			'Simple case: '.$message
+		);
 
-        $this->assertSame(
-            sprintf('foo %s bar', $expectedLinked),
-            $this->linkify(sprintf('foo %s bar', $text)),
-            'Text around: '.$message
-        );
+		$this->assertSame(
+			sprintf('foo %s bar', $expectedLinked),
+			$this->linkify(sprintf('foo %s bar', $text)),
+			'Text around: '.$message
+		);
 
-        // html should get encoded
-        $this->assertSame(
-            sprintf('&lt;div class=&quot;test&quot;&gt; %s &lt;/div&gt;', $expectedLinked),
-            $this->linkify(sprintf('<div class="test"> %s </div>', $text)),
-            'Html around: '.$message
-        );
-    }
+		// html should get encoded
+		$this->assertSame(
+			sprintf('&lt;div class=&quot;test&quot;&gt; %s &lt;/div&gt;', $expectedLinked),
+			$this->linkify(sprintf('<div class="test"> %s </div>', $text)),
+			'Html around: '.$message
+		);
+	}
 
-    /**
-     * @param string $text
-     * @return string
-     */
-    protected function linkify($text)
-    {
-        return htmlEscapeAndLinkUrls($text);
-    }
+	/**
+	 * @param string $text
+	 * @return string
+	 */
+	protected function linkify($text)
+	{
+		return htmlEscapeAndLinkUrls($text);
+	}
 }

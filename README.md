@@ -20,7 +20,7 @@ $ composer require youthweb/urllinker
 ## Usage
 
 ```php
-$urlLinker = new Youthweb\UrlLinker();
+$urlLinker = new Youthweb\UrlLinker\UrlLinker();
 
 $urlLinker->linkUrlsAndEscapeHtml($text);
 
@@ -31,10 +31,10 @@ You can configure different options for parsing URLs by passing them into `UrlLi
 
 ```php
 // Ftp addresses like "ftp://example.com" will be allowed:
-$urlLinker = new Youthweb\UrlLinker(true);
+$urlLinker = new Youthweb\UrlLinker\UrlLinker(true);
 
 // Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
-$urlLinker = new Youthweb\UrlLinker(false, true);
+$urlLinker = new Youthweb\UrlLinker\UrlLinker(false, true);
 ```
 
 ## Recognized addresses

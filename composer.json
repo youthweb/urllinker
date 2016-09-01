@@ -23,14 +23,14 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Kwi\\": "lib"
+			"Youthweb\\UrlLinker\\": "src"
 		}
 	},
 	"autoload-dev": {
 		"files": [
-			"tests/UrlLinkerTestCase.php",
-			"tests/functions/LinkUrlsInTrustedHtmlTest.php",
-			"tests/functions/HtmlEscapeAndLinkUrlsTest.php"
+			"tests/integration/UrlLinkerTestCase.php",
+			"tests/integration/functions/LinkUrlsInTrustedHtmlTest.php",
+			"tests/integration/functions/HtmlEscapeAndLinkUrlsTest.php"
 		]
 	}
 }
