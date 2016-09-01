@@ -1,9 +1,9 @@
 {
-	"name": "kwi/urllinker",
+	"name": "youthweb/urllinker",
 	"description": "Autolink URLs in text or html",
 	"type": "library",
-	"license": "CC0-1.0",
-	"homepage": "http://www.kwi.dk/projects/php/UrlLinker/",
+	"license": "GPL3",
+	"homepage": "https://github.com/youthweb",
 	"authors": [
 		{
 			"name": "Søren Løvborg",
@@ -15,12 +15,11 @@
 			"role": "Developer"
 		}
 	],
-	"support": {
-		"source": "https://bitbucket.org/kwi/urllinker",
-		"issues": "https://bitbucket.org/kwi/urllinker/issues"
-	},
 	"require": {
 		"php": ">=5.6"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^5.5"
 	},
 	"autoload": {
 		"psr-4": {
@@ -33,8 +32,5 @@
 			"tests/functions/LinkUrlsInTrustedHtmlTest.php",
 			"tests/functions/HtmlEscapeAndLinkUrlsTest.php"
 		]
-	},
-	"require-dev": {
-		"phpunit/phpunit": "^5.5"
 	}
 }
