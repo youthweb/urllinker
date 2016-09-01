@@ -5,13 +5,6 @@ namespace Youthweb\UrlLinker;
 final class UrlLinker implements UrlLinkerInterface
 {
 	/**
-	 * Associative array mapping valid TLDs to the value true.
-	 *
-	 * @var string
-	 */
-	private static $validTlds;
-
-	/**
 	 * @var bool
 	 */
 	private $allowFtpAddresses = false;
@@ -62,17 +55,6 @@ final class UrlLinker implements UrlLinkerInterface
 	/**
 	 * @return string
 	 */
-	public function __construct()
-	{
-		if ( ! static::$validTlds )
-		{
-			static::$validTlds = array_fill_keys(explode(' ', require __DIR__.'/validTlds.php'), true);
-		}
-	}
-
-	/**
-	 * @return string
-	 */
 	private function buildRegex()
 	{
 		/**
@@ -85,15 +67,15 @@ final class UrlLinker implements UrlLinkerInterface
 			$rexScheme .= '|ftp://';
 		}
 
-		$rexDomain	 = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
-		$rexIp		 = '(?:[1-9][0-9]{0,2}\.|0\.){3}(?:[1-9][0-9]{0,2}|0)';
-		$rexPort	   = '(:[0-9]{1,5})?';
-		$rexPath	   = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
-		$rexQuery	  = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
+		$rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
+		$rexIp         = '(?:[1-9][0-9]{0,2}\.|0\.){3}(?:[1-9][0-9]{0,2}|0)';
+		$rexPort       = '(:[0-9]{1,5})?';
+		$rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
+		$rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 		$rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 		$rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
 		$rexPassword   = $rexUsername; // allow the same characters as in the username
-		$rexUrl		= "($rexScheme)?(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
+		$rexUrl        = "($rexScheme)?(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
 		$rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
 		$rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
@@ -122,24 +104,27 @@ final class UrlLinker implements UrlLinkerInterface
 
 		$match = array();
 
-		while (preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position)) {
+		while (preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position))
+		{
 			list($url, $urlPosition) = $match[0];
 
 			// Add the text leading up to the URL.
 			$html .= $this->escapeHtml(substr($text, $position, $urlPosition - $position));
 
-			$scheme	  = $match[1][0];
-			$username	= $match[2][0];
-			$password	= $match[3][0];
-			$domain	  = $match[4][0];
+			$scheme      = $match[1][0];
+			$username    = $match[2][0];
+			$password    = $match[3][0];
+			$domain      = $match[4][0];
 			$afterDomain = $match[5][0]; // everything following the domain
-			$port		= $match[6][0];
-			$path		= $match[7][0];
+			$port        = $match[6][0];
+			$path        = $match[7][0];
 
 			// Check that the TLD is valid or that $domain is an IP address.
 			$tld = strtolower(strrchr($domain, '.'));
 
-			if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset(static::$validTlds[$tld])) {
+			$validTlds = DomainStorage::getValidTlds();
+
+			if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld])) {
 				// Do not permit implicit scheme if a password is specified, as
 				// this causes too many errors (e.g. "my email:foo@example.org").
 				if (!$scheme && $password) {
