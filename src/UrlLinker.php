@@ -2,13 +2,8 @@
 
 namespace Youthweb\UrlLinker;
 
-class UrlLinker implements UrlLinkerInterface
+final class UrlLinker implements UrlLinkerInterface
 {
-	/**
-	 * @var UrlLinker|null
-	 */
-	private static $instance;
-
 	/**
 	 * Associative array mapping valid TLDs to the value true.
 	 *
@@ -17,34 +12,76 @@ class UrlLinker implements UrlLinkerInterface
 	private static $validTlds;
 
 	/**
-	 * @var string
+	 * @var bool
 	 */
-	private $rexUrlLinker;
+	private $allowFtpAddresses = false;
 
 	/**
-	 * @return UrlLinker
+	 * @var bool
 	 */
-	public static function getInstance()
-	{
-		if (!static::$instance) {
-			static::$instance = new static();
-		}
-
-		return static::$instance;
-	}
+	private $allowUpperCaseUrlSchemes = false;
 
 	/**
 	 * @param bool $allowFtpAddresses
-	 * @param bool $allowUpperCaseUrlSchemes e.g. "HTTP://google.com"
+	 * @return self
 	 */
-	public function __construct($allowFtpAddresses = false, $allowUpperCaseUrlSchemes = false)
+	public function setAllowFtpAddresses($allowFtpAddresses)
+	{
+		$this->allowFtpAddresses = (bool) $allowFtpAddresses;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAllowFtpAddresses()
+	{
+		return $this->allowFtpAddresses;
+	}
+
+	/**
+	 * @param bool $allowUpperCaseUrlSchemes
+	 * @return self
+	 */
+	public function setAllowUpperCaseUrlSchemes($allowUpperCaseUrlSchemes)
+	{
+		$this->allowUpperCaseUrlSchemes = (bool) $allowUpperCaseUrlSchemes;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getAllowUpperCaseUrlSchemes()
+	{
+		return $this->allowUpperCaseUrlSchemes;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function __construct()
+	{
+		if ( ! static::$validTlds )
+		{
+			static::$validTlds = array_fill_keys(explode(' ', require __DIR__.'/validTlds.php'), true);
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	private function buildRegex()
 	{
 		/**
 		 * Regular expression bits used by linkUrlsAndEscapeHtml() to match URLs.
 		 */
 		$rexScheme = 'https?://';
 
-		if ($allowFtpAddresses) {
+		if ( $this->getAllowFtpAddresses() )
+		{
 			$rexScheme .= '|ftp://';
 		}
 
@@ -60,15 +97,14 @@ class UrlLinker implements UrlLinkerInterface
 		$rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
 		$rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
-		$this->rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
+		$rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
 
-		if ($allowUpperCaseUrlSchemes) {
-			$this->rexUrlLinker .= 'i';
+		if ( $this->getAllowUpperCaseUrlSchemes() )
+		{
+			$rexUrlLinker .= 'i';
 		}
 
-		if (!static::$validTlds) {
-			static::$validTlds = array_fill_keys(explode(' ', require __DIR__.'/validTlds.php'), true);
-		}
+		return $rexUrlLinker;
 	}
 
 	/**
@@ -86,7 +122,7 @@ class UrlLinker implements UrlLinkerInterface
 
 		$match = array();
 
-		while (preg_match($this->rexUrlLinker, $text, $match, PREG_OFFSET_CAPTURE, $position)) {
+		while (preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position)) {
 			list($url, $urlPosition) = $match[0];
 
 			// Add the text leading up to the URL.

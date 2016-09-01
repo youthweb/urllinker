@@ -6,28 +6,21 @@ class UrlLinkerTest extends PHPUnit_Framework_TestCase
 {
 	public function testItImplementsUrlLinkerInterface()
 	{
-		$this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', new UrlLinker());
-	}
+		$urlLinker = new UrlLinker();
 
-	public function testGetInstanceReturnsUrlLinkerSingleton()
-	{
-		$urlLinkerSingleton1 = UrlLinker::getInstance();
-		$urlLinkerSingleton2 = UrlLinker::getInstance();
+		$this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', $urlLinker);
 
-		$this->assertSame(
-			$urlLinkerSingleton1,
-			$urlLinkerSingleton2,
-			'Should always return the same instance (singleton)'
-		);
-
-		$this->assertInstanceOf('Youthweb\UrlLinker\UrlLinker', $urlLinkerSingleton1);
-
-		$this->assertNotSame(new UrlLinker(), $urlLinkerSingleton1);
+		$this->assertFalse($urlLinker->getAllowFtpAddresses());
+		$this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
 	}
 
 	public function testAllowingFtpAddresses()
 	{
-		$urlLinker = new UrlLinker(true);
+		$urlLinker = new UrlLinker();
+		$urlLinker->setAllowFtpAddresses(true);
+
+		$this->assertTrue($urlLinker->getAllowFtpAddresses());
+		$this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
 
 		$text = '<div>ftp://example.com</div>';
 		$expectedText = '&lt;div&gt;<a href="ftp://example.com">example.com</a>&lt;/div&gt;';
@@ -42,7 +35,11 @@ class UrlLinkerTest extends PHPUnit_Framework_TestCase
 
 	public function testAllowingUpperCaseSchemes()
 	{
-		$urlLinker = new UrlLinker(false, true);
+		$urlLinker = new UrlLinker();
+		$urlLinker->setAllowUpperCaseUrlSchemes(true);
+
+		$this->assertFalse($urlLinker->getAllowFtpAddresses());
+		$this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());
 
 		$text = '<div>HTTP://example.com</div>';
 		$expectedText = '&lt;div&gt;<a href="HTTP://example.com">example.com</a>&lt;/div&gt;';
