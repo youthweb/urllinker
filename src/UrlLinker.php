@@ -15,6 +15,11 @@ final class UrlLinker implements UrlLinkerInterface
 	private $allowUpperCaseUrlSchemes = false;
 
 	/**
+	 * @var Closure
+	 */
+	private $htmlLinkCreator;
+
+	/**
 	 * @var array
 	 */
 	private $validTlds;
@@ -55,6 +60,33 @@ final class UrlLinker implements UrlLinkerInterface
 	public function getAllowUpperCaseUrlSchemes()
 	{
 		return $this->allowUpperCaseUrlSchemes;
+	}
+
+	/**
+	 * @param Closure $creator
+	 * @return self
+	 */
+	public function setHtmlLinkCreator(\Closure $creator)
+	{
+		$this->htmlLinkCreator = $creator;
+
+		return $this;
+	}
+
+	/**
+	 * @return Closure
+	 */
+	public function getHtmlLinkCreator()
+	{
+		if ( $this->htmlLinkCreator === null )
+		{
+			$this->htmlLinkCreator = function($url, $content)
+			{
+				return $this->createHtmlLink($url, $content);
+			};
+		}
+
+		return $this->htmlLinkCreator;
 	}
 
 	/**
@@ -175,8 +207,10 @@ final class UrlLinker implements UrlLinkerInterface
 					$linkText = "$domain$port$path";
 				}
 
+				$htmlLinkCreator = $this->getHtmlLinkCreator();
+
 				// Add the hyperlink.
-				$html .= $this->createHtmlLink($completeUrl, $linkText);
+				$html .= $htmlLinkCreator($completeUrl, $linkText);
 			} else {
 				// Not a valid URL.
 				$html .= $this->escapeHtml($url);

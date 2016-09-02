@@ -1,5 +1,7 @@
 <?php
 
+namespace Youthweb\UrlLinker\Tests\Integration;
+
 abstract class UrlLinkerTestCase extends \PHPUnit_Framework_TestCase
 {
 	/**

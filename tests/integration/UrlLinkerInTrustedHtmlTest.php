@@ -1,5 +1,7 @@
 <?php
 
+namespace Youthweb\UrlLinker\Tests\Integration;
+
 use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase

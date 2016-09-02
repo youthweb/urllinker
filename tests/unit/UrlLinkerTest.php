@@ -1,8 +1,10 @@
 <?php
 
+namespace Youthweb\UrlLinker\Tests\Unit;
+
 use Youthweb\UrlLinker\UrlLinker;
 
-class UrlLinkerTest extends PHPUnit_Framework_TestCase
+class UrlLinkerTest extends \PHPUnit_Framework_TestCase
 {
 	public function testItImplementsUrlLinkerInterface()
 	{
@@ -45,6 +47,35 @@ class UrlLinkerTest extends PHPUnit_Framework_TestCase
 		$urlLinker->setValidTlds($domains);
 
 		$this->assertSame($domains, $urlLinker->getValidTlds());
+	}
+
+	/**
+	 * Test that getHtmlLinkCreator() allways returns a closure
+	 */
+	public function testGetHtmlLinkCreator()
+	{
+		$urlLinker = new UrlLinker();
+
+		$this->assertInstanceOf(\Closure::class, $urlLinker->getHtmlLinkCreator());
+	}
+
+	/**
+	 * Test that a closure can be set
+	 */
+	public function testSetHtmlLinkCreator()
+	{
+		$urlLinker = new UrlLinker();
+
+		// Simple htmlLinkCreator
+		$creator = function($url, $content)
+		{
+			return '<a href="' . $url . '">' . $content . '</a>';
+		};
+
+		$urlLinker->setHtmlLinkCreator($creator);
+
+		// Test that getHtmlLinkCreator() returns allways a closure
+		$this->assertSame($creator, $urlLinker->getHtmlLinkCreator());
 	}
 
 	public function testAllowingFtpAddresses()
