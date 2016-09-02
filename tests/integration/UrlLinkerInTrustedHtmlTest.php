@@ -17,6 +17,30 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 	}
 
 	/**
+	 * @dataProvider provideTextsWithFtpLinksWithoutHtml
+	 *
+	 * @param string $text
+	 */
+	public function testFtpUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+	{
+		$this->urlLinker->setAllowFtpAddresses(true);
+
+		$this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
+	}
+
+	/**
+	 * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
+	 *
+	 * @param string $text
+	 */
+	public function testUppercaseUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+	{
+		$this->urlLinker->setAllowUpperCaseUrlSchemes(true);
+
+		$this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
+	}
+
+	/**
 	 * @dataProvider provideTextsNotContainingAnyUrls
 	 *
 	 * @param string $text

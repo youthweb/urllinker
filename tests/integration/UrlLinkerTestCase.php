@@ -20,6 +20,34 @@ abstract class UrlLinkerTestCase extends \PHPUnit_Framework_TestCase
 	/**
 	 * @return array
 	 */
+	public function provideTextsWithFtpLinksWithoutHtml()
+	{
+		return array(
+			// simple
+			array(
+				'ftp://example.com',
+				$this->link('ftp://example.com', 'example.com')
+			),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function provideTextsWithUppercaseLinksWithoutHtml()
+	{
+		return array(
+			// simple
+			array(
+				'HTTP://EXAMPLE.COM',
+				$this->link('HTTP://EXAMPLE.COM', 'EXAMPLE.COM')
+			),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
 	public function provideTextsWithLinksWithoutHtml()
 	{
 		return array(
