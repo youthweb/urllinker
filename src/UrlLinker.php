@@ -154,6 +154,12 @@ final class UrlLinker implements UrlLinkerInterface
 	 */
 	public function linkUrlsAndEscapeHtml($text)
 	{
+		// We can abort if there is no . in $text
+		if ( strpos($text, '.') === false )
+		{
+			return $this->escapeHtml($text);
+		}
+
 		$html = '';
 
 		$position = 0;
