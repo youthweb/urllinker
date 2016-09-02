@@ -3,7 +3,7 @@
 [![Latest Version](https://img.shields.io/github/release/youthweb/urllinker.svg)](https://github.com/youthweb/urllinker/releases)
 [![Software License](https://img.shields.io/badge/license-GPL3-brightgreen.svg)](LICENSE.md)
 [![Build Status](https://travis-ci.org/youthweb/urllinker.svg?branch=master)](https://travis-ci.org/youthweb/urllinker)
-[![Coverage Status](https://coveralls.io/repos/github/youthweb/urllinker/badge.svg?branch=master)](https://coveralls.io/github/youthweb/bbcode-parser?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/youthweb/urllinker/badge.svg?branch=master)](https://coveralls.io/github/youthweb/urllinker?branch=master)
 
 UrlLinker converts any web addresses in plain text into HTML hyperlinks.
 
@@ -27,25 +27,34 @@ $urlLinker->linkUrlsAndEscapeHtml($text);
 $urlLinker->linkUrlsInTrustedHtml($html);
 ```
 
-You can configure different options for parsing URLs by passing them into `UrlLinker`'s constructor:
+You can configure different options for parsing URLs by passing them to `UrlLinker`:
 
 ```php
 // Ftp addresses like "ftp://example.com" will be allowed:
-$urlLinker = new Youthweb\UrlLinker\UrlLinker(true);
+$urlLinker->setAllowFtpAddresses(true);
 
 // Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
-$urlLinker = new Youthweb\UrlLinker\UrlLinker(false, true);
+$urlLinker->setAllowUpperCaseUrlSchemes(true);
+
+// Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
+$urlLinker->setAllowUpperCaseUrlSchemes(true);
+
+// Add a Closure to modify the way the urls will be linked:
+$urlLinker->setHtmlLinkCreator(function($url, $content)
+{
+    return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
+});
 ```
 
 ## Recognized addresses
 
 - Web addresses
   - Recognized URL schemes: "http" and "https"
-    - The ``http://`` prefix is optional.
+    - The `http://` prefix is optional.
     - Support for additional schemes, e.g. "ftp", can easily be added by
-      tweaking ``$rexScheme``.
+      setting `setAllowFtpAddresses(true)`.
     - The scheme must be written in lower case. This requirement can be lifted
-      by adding an ``i`` (the ``PCRE_CASELESS`` modifier) to ``$rexUrlLinker``.
+      by setting `setAllowUpperCaseUrlSchemes(true)`.
   - Hosts may be specified using domain names or IPv4 addresses.
     - IPv6 addresses are not supported.
   - Port numbers are allowed.
@@ -59,11 +68,10 @@ $urlLinker = new Youthweb\UrlLinker\UrlLinker(false, true);
       it is an effective method of rejecting invalid URLs.
     - Internationalized *top-level* domain names must be written in Punycode in
       order to be recognized.
-    - If you need to support unqualified domain names, such as ``localhost``,
-      you may disable the TLD check by 1) replacing ``+`` with ``*`` in the
-      ``$rexDomain`` value and 2) replacing the ``if`` statement line beneath
-      the "Check that the TLD is valid" comment with ``if (true)``. This is
-      obviously a quick-and-dirty hack, and may cause false positives.
+    - If you want to support only some specific TLD you can set them with
+      `setValidTlds(['.com' => true, '.net' => true])`
+    - If you need to support unqualified domain names, such as `localhost`,
+      you can also set them with `setValidTlds(['.localhost' => true])`
 - Email addresses
   - Supports the full range of commonly used address formats, including "plus
     addresses" (as popularized by Gmail).
@@ -73,13 +81,10 @@ $urlLinker = new Youthweb\UrlLinker\UrlLinker(false, true);
     foiling naive email address harvesters.
 - Addresses are recognized correctly in normal sentence contexts. For instance,
   in "Visit stackoverflow.com.", the final period is not part of the URL.
-- User input is properly sanitized to prevent `cross-site scripting`__ (XSS),
-  and ampersands in URLs are `correctly escaped`__ as ``&amp;`` (this does not
-  apply to the ``linkUrlsInTrustedHtml`` function, which assumes its input to
+- User input is properly sanitized to prevent [cross-site scripting](http://en.wikipedia.org/wiki/Cross-site_scripting) (XSS),
+  and ampersands in URLs are [correctly escaped](http://www.htmlhelp.com/tools/validator/problems.html#amp) as `&amp;` (this does not
+  apply to the `linkUrlsInTrustedHtml()` function, which assumes its input to
   be valid HTML).
-
-__ http://en.wikipedia.org/wiki/Cross-site_scripting
-__ http://www.htmlhelp.com/tools/validator/problems.html#amp
 
 ## Changelog
 

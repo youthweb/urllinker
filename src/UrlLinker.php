@@ -90,7 +90,7 @@ final class UrlLinker implements UrlLinkerInterface
 	}
 
 	/**
-	 * @param bool $allowUpperCaseUrlSchemes
+	 * @param array $validTlds
 	 * @return self
 	 */
 	public function setValidTlds(array $validTlds)
@@ -111,43 +111,6 @@ final class UrlLinker implements UrlLinkerInterface
 		}
 
 		return $this->validTlds;
-	}
-
-	/**
-	 * @return string
-	 */
-	private function buildRegex()
-	{
-		/**
-		 * Regular expression bits used by linkUrlsAndEscapeHtml() to match URLs.
-		 */
-		$rexScheme = 'https?://';
-
-		if ( $this->getAllowFtpAddresses() )
-		{
-			$rexScheme .= '|ftp://';
-		}
-
-		$rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
-		$rexIp         = '(?:[1-9][0-9]{0,2}\.|0\.){3}(?:[1-9][0-9]{0,2}|0)';
-		$rexPort       = '(:[0-9]{1,5})?';
-		$rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
-		$rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-		$rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-		$rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
-		$rexPassword   = $rexUsername; // allow the same characters as in the username
-		$rexUrl        = "($rexScheme)?(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
-		$rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
-		$rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
-
-		$rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
-
-		if ( $this->getAllowUpperCaseUrlSchemes() )
-		{
-			$rexUrlLinker .= 'i';
-		}
-
-		return $rexUrlLinker;
 	}
 
 	/**
@@ -278,6 +241,43 @@ final class UrlLinker implements UrlLinkerInterface
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @return string
+	 */
+	private function buildRegex()
+	{
+		/**
+		 * Regular expression bits used by linkUrlsAndEscapeHtml() to match URLs.
+		 */
+		$rexScheme = 'https?://';
+
+		if ( $this->getAllowFtpAddresses() )
+		{
+			$rexScheme .= '|ftp://';
+		}
+
+		$rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
+		$rexIp         = '(?:[1-9][0-9]{0,2}\.|0\.){3}(?:[1-9][0-9]{0,2}|0)';
+		$rexPort       = '(:[0-9]{1,5})?';
+		$rexPath       = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
+		$rexQuery      = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
+		$rexFragment   = '(#[!$-/0-9?:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
+		$rexUsername   = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
+		$rexPassword   = $rexUsername; // allow the same characters as in the username
+		$rexUrl        = "($rexScheme)?(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
+		$rexTrailPunct = "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
+		$rexNonUrl	 = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
+
+		$rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
+
+		if ( $this->getAllowUpperCaseUrlSchemes() )
+		{
+			$rexUrlLinker .= 'i';
+		}
+
+		return $rexUrlLinker;
 	}
 
 	/**

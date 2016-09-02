@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Forked from https://bitbucket.org/kwi/urllinker
 - This CHANGELOG.md
 - Automated testing and code coverage with travis-ci.org and coveralls.io
-- Updated the TLD list
+- Updated the IANA TLD list
+- Add your own supported TLDs
 
 ### Changed
 - Updated min. requirements to PHP 5.6
