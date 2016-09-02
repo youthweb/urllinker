@@ -14,10 +14,44 @@ class UrlLinkerTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
 	}
 
+	public function testAllowFtpAddressesConfig()
+	{
+		$urlLinker = new UrlLinker();
+
+		$this->assertFalse($urlLinker->getAllowFtpAddresses());
+
+		$urlLinker->setAllowFtpAddresses(true);
+
+		$this->assertTrue($urlLinker->getAllowFtpAddresses());
+	}
+
+	public function testAllowUpperCaseUrlSchemesConfig()
+	{
+		$urlLinker = new UrlLinker();
+
+		$this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
+
+		$urlLinker->setAllowUpperCaseUrlSchemes(true);
+
+		$this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());
+	}
+
+	public function testValidTldsConfig()
+	{
+		$urlLinker = new UrlLinker();
+
+		$domains = ['.com' => true, '.org' => true];
+
+		$urlLinker->setValidTlds($domains);
+
+		$this->assertSame($domains, $urlLinker->getValidTlds());
+	}
+
 	public function testAllowingFtpAddresses()
 	{
 		$urlLinker = new UrlLinker();
 		$urlLinker->setAllowFtpAddresses(true);
+		$urlLinker->setValidTlds(['.com' => true]);
 
 		$this->assertTrue($urlLinker->getAllowFtpAddresses());
 		$this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
@@ -37,6 +71,7 @@ class UrlLinkerTest extends PHPUnit_Framework_TestCase
 	{
 		$urlLinker = new UrlLinker();
 		$urlLinker->setAllowUpperCaseUrlSchemes(true);
+		$urlLinker->setValidTlds(['.com' => true]);
 
 		$this->assertFalse($urlLinker->getAllowFtpAddresses());
 		$this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());

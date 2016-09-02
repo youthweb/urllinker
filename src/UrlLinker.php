@@ -15,6 +15,11 @@ final class UrlLinker implements UrlLinkerInterface
 	private $allowUpperCaseUrlSchemes = false;
 
 	/**
+	 * @var array
+	 */
+	private $validTlds;
+
+	/**
 	 * @param bool $allowFtpAddresses
 	 * @return self
 	 */
@@ -50,6 +55,30 @@ final class UrlLinker implements UrlLinkerInterface
 	public function getAllowUpperCaseUrlSchemes()
 	{
 		return $this->allowUpperCaseUrlSchemes;
+	}
+
+	/**
+	 * @param bool $allowUpperCaseUrlSchemes
+	 * @return self
+	 */
+	public function setValidTlds(array $validTlds)
+	{
+		$this->validTlds = $validTlds;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function getValidTlds()
+	{
+		if ( $this->validTlds === null )
+		{
+			$this->validTlds = DomainStorage::getValidTlds();
+		}
+
+		return $this->validTlds;
 	}
 
 	/**
@@ -122,7 +151,7 @@ final class UrlLinker implements UrlLinkerInterface
 			// Check that the TLD is valid or that $domain is an IP address.
 			$tld = strtolower(strrchr($domain, '.'));
 
-			$validTlds = DomainStorage::getValidTlds();
+			$validTlds = $this->getValidTlds();
 
 			if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld])) {
 				// Do not permit implicit scheme if a password is specified, as

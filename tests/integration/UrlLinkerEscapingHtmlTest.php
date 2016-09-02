@@ -14,6 +14,17 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 		$this->urlLinker = new UrlLinker();
 	}
 
+	public function testGetValidTlds()
+	{
+		$urlLinker = new UrlLinker();
+
+		$tlds = $urlLinker->getValidTlds();
+
+		$this->assertTrue(is_array($tlds));
+		$this->assertTrue(array_key_exists('.com', $tlds));
+		$this->assertTrue($tlds['.com']);
+	}
+
 	/**
 	 * @dataProvider provideTextsNotContainingAnyUrls
 	 *
