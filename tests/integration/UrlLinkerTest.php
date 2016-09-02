@@ -50,4 +50,59 @@ class UrlLinkerTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
 	}
+
+	/**
+	 * Test the default EmailLinkCreator
+	 */
+	public function testDefaultEmailLinkCreator()
+	{
+		$urlLinker = new UrlLinker();
+
+		$text = 'mail@example.com';
+		$expected = '<a href="mailto:mail&#64;example.com">mail&#64;example.com</a>';
+
+		$this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
+	}
+
+	/**
+	 * Test a custom EmailLinkCreator
+	 */
+	public function testCustomEmailLinkCreator()
+	{
+		$urlLinker = new UrlLinker();
+
+		// Simple EmailLinkCreator
+		$creator = function($email, $content)
+		{
+			return '<a href="' . $email . '" class="email">' . $content . '</a>';
+		};
+
+		$urlLinker->setEmailLinkCreator($creator);
+
+		$text = 'mail@example.com';
+		$expected = '<a href="mail@example.com" class="email">mail@example.com</a>';
+
+		$this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
+	}
+
+	/**
+	 * Test disable EmailLinkCreator
+	 */
+	public function testDisableEmailLinkCreator()
+	{
+		$urlLinker = new UrlLinker();
+
+		// This EmailLinkCreator returns simply the email
+		$creator = function($email, $content)
+		{
+			return $email;
+		};
+
+		$urlLinker->setEmailLinkCreator($creator);
+
+		$text = 'mail@example.com';
+		$expected = 'mail@example.com';
+
+		$this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
+	}
 }

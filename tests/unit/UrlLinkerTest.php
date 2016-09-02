@@ -78,6 +78,35 @@ class UrlLinkerTest extends \PHPUnit_Framework_TestCase
 		$this->assertSame($creator, $urlLinker->getHtmlLinkCreator());
 	}
 
+	/**
+	 * Test that getEmailLinkCreator() allways returns a closure
+	 */
+	public function testGetEmailLinkCreator()
+	{
+		$urlLinker = new UrlLinker();
+
+		$this->assertInstanceOf(\Closure::class, $urlLinker->getEmailLinkCreator());
+	}
+
+	/**
+	 * Test that a closure can be set
+	 */
+	public function testSetEmailLinkCreator()
+	{
+		$urlLinker = new UrlLinker();
+
+		// Simple emailLinkCreator
+		$creator = function($email, $content)
+		{
+			return '<a href="mailto:' . $email . '">' . $content . '</a>';
+		};
+
+		$urlLinker->setEmailLinkCreator($creator);
+
+		// Test that getEmailLinkCreator() returns allways a closure
+		$this->assertSame($creator, $urlLinker->getEmailLinkCreator());
+	}
+
 	public function testAllowingFtpAddresses()
 	{
 		$urlLinker = new UrlLinker();

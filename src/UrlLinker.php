@@ -20,6 +20,11 @@ final class UrlLinker implements UrlLinkerInterface
 	private $htmlLinkCreator;
 
 	/**
+	 * @var Closure
+	 */
+	private $emailLinkCreator;
+
+	/**
 	 * @var array
 	 */
 	private $validTlds;
@@ -90,6 +95,33 @@ final class UrlLinker implements UrlLinkerInterface
 	}
 
 	/**
+	 * @param Closure $creator
+	 * @return self
+	 */
+	public function setEmailLinkCreator(\Closure $creator)
+	{
+		$this->emailLinkCreator = $creator;
+
+		return $this;
+	}
+
+	/**
+	 * @return Closure
+	 */
+	public function getEmailLinkCreator()
+	{
+		if ( $this->emailLinkCreator === null )
+		{
+			$this->emailLinkCreator = function($url, $content)
+			{
+				return $this->createEmailLink($url, $content);
+			};
+		}
+
+		return $this->emailLinkCreator;
+	}
+
+	/**
 	 * @param array $validTlds
 	 * @return self
 	 */
@@ -148,10 +180,12 @@ final class UrlLinker implements UrlLinkerInterface
 
 			$validTlds = $this->getValidTlds();
 
-			if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld])) {
+			if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld]))
+			{
 				// Do not permit implicit scheme if a password is specified, as
 				// this causes too many errors (e.g. "my email:foo@example.org").
-				if (!$scheme && $password) {
+				if ( ! $scheme && $password )
+				{
 					$html .= $this->escapeHtml($username);
 
 					// Continue text parsing at the ':' following the "username".
@@ -160,21 +194,28 @@ final class UrlLinker implements UrlLinkerInterface
 					continue;
 				}
 
-				if (!$scheme && $username && !$password && !$afterDomain) {
+				if ( ! $scheme && $username && ! $password && ! $afterDomain )
+				{
 					// Looks like an email address.
-					$completeUrl = "mailto:$url";
-					$linkText = $url;
-				} else {
+					$emailLinkCreator = $this->getEmailLinkCreator();
+
+					// Add the hyperlink.
+					$html .= $emailLinkCreator($url, $url);
+				}
+				else
+				{
 					// Prepend http:// if no scheme is specified
 					$completeUrl = $scheme ? $url : "http://$url";
 					$linkText = "$domain$port$path";
+
+					$htmlLinkCreator = $this->getHtmlLinkCreator();
+
+					// Add the hyperlink.
+					$html .= $htmlLinkCreator($completeUrl, $linkText);
 				}
-
-				$htmlLinkCreator = $this->getHtmlLinkCreator();
-
-				// Add the hyperlink.
-				$html .= $htmlLinkCreator($completeUrl, $linkText);
-			} else {
+			}
+			else
+			{
 				// Not a valid URL.
 				$html .= $this->escapeHtml($url);
 			}
@@ -207,7 +248,8 @@ final class UrlLinker implements UrlLinkerInterface
 		$result = '';
 
 		// Iterate over every piece of markup in the HTML.
-		while (true) {
+		while (true)
+		{
 			$match = array();
 			preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position);
 
@@ -217,19 +259,22 @@ final class UrlLinker implements UrlLinkerInterface
 			$text = substr($html, $position, $markupPosition - $position);
 
 			// Link URLs unless we're inside an anchor tag.
-			if (!$insideAnchorTag) {
+			if ( ! $insideAnchorTag )
+			{
 				$text = $this->linkUrlsAndEscapeHtml($text);
 			}
 
 			$result .= $text;
 
 			// End of HTML?
-			if ($markup === '') {
+			if ( $markup === '' )
+			{
 				break;
 			}
 
 			// Check if markup is an anchor tag ('<a>', '</a>').
-			if ($markup[0] !== '&' && $match[1][0] === 'a') {
+			if ( $markup[0] !== '&' && $match[1][0] === 'a' )
+			{
 				$insideAnchorTag = ($markup[1] !== '/');
 			}
 
@@ -292,6 +337,19 @@ final class UrlLinker implements UrlLinkerInterface
 			$this->escapeHtml($url),
 			$this->escapeHtml($content)
 		);
+
+		// Cheap e-mail obfuscation to trick the dumbest mail harvesters.
+		return str_replace('@', '&#64;', $link);
+	}
+
+	/**
+	 * @param string $url
+	 * @param string $content
+	 * @return string
+	 */
+	private function createEmailLink($url, $content)
+	{
+		$link = $this->createHtmlLink("mailto:$url", $content);
 
 		// Cheap e-mail obfuscation to trick the dumbest mail harvesters.
 		return str_replace('@', '&#64;', $link);

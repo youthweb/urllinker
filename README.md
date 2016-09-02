@@ -41,6 +41,15 @@ $urlLinker->setHtmlLinkCreator(function($url, $content)
 {
     return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
 });
+
+// Add a Closure to modify the way the emails will be linked:
+$urlLinker->setEmailLinkCreator(function($email, $content)
+{
+    return '<a href="mailto:' . $email . '" class="email">' . $content . '</a>';
+});
+
+// You can also disable the links for email with a closure:
+$urlLinker->setEmailLinkCreator(function($email, $content) { return $email; });
 ```
 
 ## Recognized addresses
@@ -76,6 +85,8 @@ $urlLinker->setHtmlLinkCreator(function($url, $content)
     the RFCs but never seen in practice.
   - Simplistic spam protection: The at-sign is converted to a HTML entity,
     foiling naive email address harvesters.
+  - If you don't want to link emails you can set closure that simply returns the
+    raw email with `setEmailLinkCreator(function($email, $content) { return $email; })`
 - Addresses are recognized correctly in normal sentence contexts. For instance,
   in "Visit stackoverflow.com.", the final period is not part of the URL.
 - User input is properly sanitized to prevent [cross-site scripting](http://en.wikipedia.org/wiki/Cross-site_scripting) (XSS),

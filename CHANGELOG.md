@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Automated testing and code coverage with travis-ci.org and coveralls.io
 - Updated the IANA TLD list
 - Add your own supported TLDs
+- Add a closure to modify the html link creation
+- Add a closure to modify or disable the email link creation
 
 ### Changed
 - Updated min. requirements to PHP 5.6
