@@ -13,6 +13,7 @@ abstract class UrlLinkerTestCase extends \PHPUnit_Framework_TestCase
 			array(''),
 			array('Hello World!'),
 			array('Looks like www.it.contains.an.url/somewhere but it really does not'),
+			array('This german date 20.07.1963 isn\'t a domain.'), // @see https://bitbucket.org/kwi/urllinker/issues/23/german-dates-get-turned-into-links
 		);
 	}
 
@@ -113,6 +114,14 @@ abstract class UrlLinkerTestCase extends \PHPUnit_Framework_TestCase
 			array(
 				'e.com/żółć',
 				$this->link('http://e.com/żółć', 'e.com/żółć')
+			),
+			// german umlaute, @see https://bitbucket.org/kwi/urllinker/issues/13/special-characters-like-seems-break-it-up
+			array(
+				'visiüble www.pc.fi hidden ö hidden a.bc visibleä',
+				sprintf(
+					'visiüble %s hidden ö hidden a.bc visibleä',
+					$this->link('http://www.pc.fi', 'www.pc.fi')
+				),
 			),
 
 			// url-encoded url

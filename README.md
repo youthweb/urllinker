@@ -36,9 +36,6 @@ $urlLinker->setAllowFtpAddresses(true);
 // Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
 $urlLinker->setAllowUpperCaseUrlSchemes(true);
 
-// Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
-$urlLinker->setAllowUpperCaseUrlSchemes(true);
-
 // Add a Closure to modify the way the urls will be linked:
 $urlLinker->setHtmlLinkCreator(function($url, $content)
 {
