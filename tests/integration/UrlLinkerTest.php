@@ -105,4 +105,46 @@ class UrlLinkerTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
 	}
+
+	/**
+	 * Test html escaping
+	 *
+	 * @dataProvider providerEscapingHtml
+	 */
+	public function testEscapingHtml($text, $expected)
+	{
+		$urlLinker = new UrlLinker();
+
+		$this->assertSame($expected, $urlLinker->linkUrlsAndEscapeHtml($text));
+	}
+
+	public function providerEscapingHtml()
+	{
+		return [
+			[
+				'\'',
+				'\'',
+			],
+			[
+				'"',
+				'&quot;',
+			],
+			[
+				'&quot;',
+				'&quot;',
+			],
+			[
+				'<>',
+				'&lt;&gt;',
+			],
+			[
+				'&lt;&gt;',
+				'&lt;&gt;',
+			],
+			[
+				'&amp;',
+				'&amp;',
+			],
+		];
+	}
 }

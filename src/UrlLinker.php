@@ -367,6 +367,10 @@ final class UrlLinker implements UrlLinkerInterface
 	 */
 	private function escapeHtml($string)
 	{
-		return htmlspecialchars($string);
+		$flags = ENT_COMPAT | ENT_HTML401;
+		$encoding = ini_get("default_charset");
+		$double_encode = false; // Do not double encode
+
+		return htmlspecialchars($string, $flags, $encoding, $double_encode);
 	}
 }
