@@ -142,6 +142,10 @@ class UrlLinkerTest extends \PHPUnit_Framework_TestCase
 				'&lt;&gt;',
 			],
 			[
+				'&',
+				'&amp;',
+			],
+			[
 				'&amp;',
 				'&amp;',
 			],

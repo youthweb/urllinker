@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.0] - 2016-09-05
+
 ### Added
 - Forked from https://bitbucket.org/kwi/urllinker
 - This CHANGELOG.md
@@ -19,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Updated min. requirements to PHP 5.6
 - Moved the config from the constructor to their own getter and setter methods
+- Do not encode html characters twice
 - Licensed under GPL3
 
-[Unreleased]: https://github.com/youthweb/urllinker/compare/a173dfe2f6ff5a4423612b423323e94b5d2f58e2...HEAD
+[Unreleased]: https://github.com/youthweb/urllinker/compare/1.0.0...HEAD
+[1.0]: https://github.com/youthweb/urllinker/compare/a173dfe2f6ff5a4423612b423323e94b5d2f58e2...1.0.0
