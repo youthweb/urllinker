@@ -97,4 +97,51 @@ EOD;
 			'Html around: '.$message
 		);
 	}
+
+	/**
+	 * @dataProvider provideTextsWithHtml
+	 *
+	 * @param string	  $text
+	 * @param string	  $expectedLinked
+	 * @param string|null $message
+	 */
+	public function testHtmlInText($text, $expectedLinked, $message = null)
+	{
+		$this->urlLinker->setAllowUpperCaseUrlSchemes(true);
+
+		$this->testUrlsGetLinkedInText($text, $expectedLinked);
+	}
+
+	/**
+	 * provide html in text
+	 */
+	public function provideTextsWithHtml()
+	{
+		return array(
+			array(
+				'<a href="http://example.com?a=b&amp;c=d">example.com</a>',
+				'<a href="http://example.com?a=b&amp;c=d">example.com</a>',
+			),
+			array(
+				'<a href="http://example.com?a=b&amp%3Bc=d">example.com</a>',
+				'<a href="http://example.com?a=b&amp%3Bc=d">example.com</a>',
+			),
+			array(
+				'<a href="http://example.com?a=b%26amp%3Bc=d">example.com</a>',
+				'<a href="http://example.com?a=b%26amp%3Bc=d">example.com</a>',
+			),
+			array(
+				'http://example.com?a=b&c=d',
+				$this->link('http://example.com?a=b&amp;c=d', 'example.com'),
+			),
+			array(
+				'http://example.com?a=b&amp%3bc=d',
+				$this->link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
+			),
+			array(
+				'http://example.com?a=b&amp;c=d',
+				$this->link('http://example.com?a=b', 'example.com') . '&amp;c=d',
+			),
+		);
+	}
 }
