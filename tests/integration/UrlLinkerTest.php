@@ -4,7 +4,7 @@ namespace Youthweb\UrlLinker\Tests\Integration;
 
 use Youthweb\UrlLinker\UrlLinker;
 
-class UrlLinkerTest extends \PHPUnit_Framework_TestCase
+class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 {
 	public function testGetValidTlds()
 	{

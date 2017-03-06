@@ -2,7 +2,7 @@
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
-abstract class UrlLinkerTestCase extends \PHPUnit_Framework_TestCase
+abstract class UrlLinkerTestCase extends \PHPUnit\Framework\TestCase
 {
 	/**
 	 * @return array

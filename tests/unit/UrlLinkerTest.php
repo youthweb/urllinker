@@ -4,7 +4,7 @@ namespace Youthweb\UrlLinker\Tests\Unit;
 
 use Youthweb\UrlLinker\UrlLinker;
 
-class UrlLinkerTest extends \PHPUnit_Framework_TestCase
+class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 {
 	public function testItImplementsUrlLinkerInterface()
 	{
