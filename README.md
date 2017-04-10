@@ -27,29 +27,36 @@ $urlLinker->linkUrlsAndEscapeHtml($text);
 $urlLinker->linkUrlsInTrustedHtml($html);
 ```
 
-You can configure different options for parsing URLs by passing them to `UrlLinker`:
+You can optional configure different options for parsing URLs by passing them to `UrlLinker::__construct()`:
 
 ```php
-// Ftp addresses like "ftp://example.com" will be allowed:
-$urlLinker->setAllowFtpAddresses(true);
+$config = [
+    // Ftp addresses like "ftp://example.com" will be allowed, default false
+    'allowFtpAddresses' => true,
 
-// Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
-$urlLinker->setAllowUpperCaseUrlSchemes(true);
+    // Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
+    'setAllowUpperCaseUrlSchemes' => true,
 
-// Add a Closure to modify the way the urls will be linked:
-$urlLinker->setHtmlLinkCreator(function($url, $content)
-{
-    return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
-});
+    // Add a Closure to modify the way the urls will be linked:
+    'htmlLinkCreator' => function($url, $content)
+    {
+        return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
+    },
 
-// Add a Closure to modify the way the emails will be linked:
-$urlLinker->setEmailLinkCreator(function($email, $content)
-{
-    return '<a href="mailto:' . $email . '" class="email">' . $content . '</a>';
-});
+    // Add a Closure to modify the way the emails will be linked:
+    'emailLinkCreator' => function($email, $content)
+    {
+        return '<a href="mailto:' . $email . '" class="email">' . $content . '</a>';
+    },
 
-// You can also disable the links for email with a closure:
-$urlLinker->setEmailLinkCreator(function($email, $content) { return $email; });
+    // You can also disable the links for email with a closure:
+    'emailLinkCreator' => function($email, $content) { return $email; },
+
+    // You can customize the recognizable Top Level Domains:
+    'validTlds' => ['.local' => true],
+];
+
+$urlLinker = new Youthweb\UrlLinker\UrlLinker($config);
 ```
 
 ## Recognized addresses
