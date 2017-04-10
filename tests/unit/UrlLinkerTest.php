@@ -12,10 +12,15 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 
 		$this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', $urlLinker);
 
+		// @deprecated since version 1.1, to be removed in 2.0.
 		$this->assertFalse($urlLinker->getAllowFtpAddresses());
+		// @deprecated since version 1.1, to be removed in 2.0.
 		$this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
 	}
 
+	/**
+	 * @deprecated since version 1.1, to be removed in 2.0.
+	 */
 	public function testAllowFtpAddressesConfig()
 	{
 		$urlLinker = new UrlLinker();
@@ -27,6 +32,9 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 		$this->assertTrue($urlLinker->getAllowFtpAddresses());
 	}
 
+	/**
+	 * @deprecated since version 1.1, to be removed in 2.0.
+	 */
 	public function testAllowUpperCaseUrlSchemesConfig()
 	{
 		$urlLinker = new UrlLinker();
@@ -38,6 +46,9 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 		$this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());
 	}
 
+	/**
+	 * @deprecated since version 1.1, to be removed in 2.0.
+	 */
 	public function testValidTldsConfig()
 	{
 		$urlLinker = new UrlLinker();
@@ -51,6 +62,8 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * Test that getHtmlLinkCreator() allways returns a closure
+	 *
+	 * @deprecated since version 1.1, to be removed in 2.0.
 	 */
 	public function testGetHtmlLinkCreator()
 	{
@@ -61,6 +74,8 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * Test that a closure can be set
+	 *
+	 * @deprecated since version 1.1, to be removed in 2.0.
 	 */
 	public function testSetHtmlLinkCreator()
 	{
@@ -80,6 +95,8 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * Test that getEmailLinkCreator() allways returns a closure
+	 *
+	 * @deprecated since version 1.1, to be removed in 2.0.
 	 */
 	public function testGetEmailLinkCreator()
 	{
@@ -90,6 +107,8 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 
 	/**
 	 * Test that a closure can be set
+	 *
+	 * @deprecated since version 1.1, to be removed in 2.0.
 	 */
 	public function testSetEmailLinkCreator()
 	{
@@ -107,6 +126,9 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 		$this->assertSame($creator, $urlLinker->getEmailLinkCreator());
 	}
 
+	/**
+	 * @deprecated since version 1.1, to be removed in 2.0.
+	 */
 	public function testAllowingFtpAddresses()
 	{
 		$urlLinker = new UrlLinker();
@@ -127,6 +149,9 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 		$this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
 	}
 
+	/**
+	 * @deprecated since version 1.1, to be removed in 2.0.
+	 */
 	public function testAllowingUpperCaseSchemes()
 	{
 		$urlLinker = new UrlLinker();

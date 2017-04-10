@@ -6,6 +6,9 @@ use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 {
+	/**
+	 * @deprecated since version 1.1, to be removed in 2.0.
+	 */
 	public function testGetValidTlds()
 	{
 		$urlLinker = new UrlLinker();
@@ -35,15 +38,15 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testCustomHtmlLinkCreator()
 	{
-		$urlLinker = new UrlLinker();
-
 		// Simple htmlLinkCreator
 		$creator = function($url, $content)
 		{
 			return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
 		};
 
-		$urlLinker->setHtmlLinkCreator($creator);
+		$urlLinker = new UrlLinker([
+			'htmlLinkCreator' => $creator,
+		]);
 
 		$text = 'example.com';
 		$expected = '<a href="http://example.com" target="_blank">example.com</a>';
@@ -69,15 +72,15 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testCustomEmailLinkCreator()
 	{
-		$urlLinker = new UrlLinker();
-
 		// Simple EmailLinkCreator
 		$creator = function($email, $content)
 		{
 			return '<a href="' . $email . '" class="email">' . $content . '</a>';
 		};
 
-		$urlLinker->setEmailLinkCreator($creator);
+		$urlLinker = new UrlLinker([
+			'emailLinkCreator' => $creator,
+		]);
 
 		$text = 'mail@example.com';
 		$expected = '<a href="mail@example.com" class="email">mail@example.com</a>';
@@ -90,15 +93,15 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 	 */
 	public function testDisableEmailLinkCreator()
 	{
-		$urlLinker = new UrlLinker();
-
 		// This EmailLinkCreator returns simply the email
 		$creator = function($email, $content)
 		{
 			return $email;
 		};
 
-		$urlLinker->setEmailLinkCreator($creator);
+		$urlLinker = new UrlLinker([
+			'emailLinkCreator' => $creator,
+		]);
 
 		$text = 'mail@example.com';
 		$expected = 'mail@example.com';

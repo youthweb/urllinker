@@ -23,7 +23,9 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 	 */
 	public function testFtpUrlsGetLinkedInText($text, $expectedLinked, $message = null)
 	{
-		$this->urlLinker->setAllowFtpAddresses(true);
+		$this->urlLinker = new UrlLinker([
+			'allowFtpAddresses' => true,
+		]);
 
 		$this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
 	}
@@ -35,7 +37,9 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 	 */
 	public function testUppercaseUrlsGetLinkedInText($text, $expectedLinked, $message = null)
 	{
-		$this->urlLinker->setAllowUpperCaseUrlSchemes(true);
+		$this->urlLinker = new UrlLinker([
+			'allowUpperCaseUrlSchemes' => true,
+		]);
 
 		$this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
 	}
@@ -107,7 +111,9 @@ EOD;
 	 */
 	public function testHtmlInText($text, $expectedLinked, $message = null)
 	{
-		$this->urlLinker->setAllowUpperCaseUrlSchemes(true);
+		$this->urlLinker = new UrlLinker([
+			'allowUpperCaseUrlSchemes' => true,
+		]);
 
 		$this->testUrlsGetLinkedInText($text, $expectedLinked);
 	}
