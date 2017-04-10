@@ -56,11 +56,30 @@ final class UrlLinker implements UrlLinkerInterface
 		{
 			if ( array_key_exists($key, $options) )
 			{
-				$this->$key = $options[$key];
+				$value = $options[$key];
 			}
-			else
+
+			switch ($key)
 			{
-				$this->$key = $value;
+				case 'allowFtpAddresses':
+					$this->setAllowFtpAddresses($value);
+					break;
+
+				case 'allowUpperCaseUrlSchemes':
+					$this->setAllowUpperCaseUrlSchemes($value);
+					break;
+
+				case 'htmlLinkCreator':
+					$this->setHtmlLinkCreator($value);
+					break;
+
+				case 'emailLinkCreator':
+					$this->setEmailLinkCreator($value);
+					break;
+
+				case 'validTlds':
+					$this->setValidTlds($value);
+					break;
 			}
 		}
 	}
