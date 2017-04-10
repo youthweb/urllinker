@@ -7,12 +7,12 @@ final class UrlLinker implements UrlLinkerInterface
 	/**
 	 * @var bool
 	 */
-	private $allowFtpAddresses = false;
+	private $allowFtpAddresses;
 
 	/**
 	 * @var bool
 	 */
-	private $allowUpperCaseUrlSchemes = false;
+	private $allowUpperCaseUrlSchemes;
 
 	/**
 	 * @var Closure
@@ -28,6 +28,42 @@ final class UrlLinker implements UrlLinkerInterface
 	 * @var array
 	 */
 	private $validTlds;
+
+	/**
+	 * Set the configuration
+	 *
+	 * @since v1.1.0
+	 * @param array $options Configuation array
+	 * @return self
+	 */
+	public function __construct(array $options = [])
+	{
+		$default_options = [
+			'allowFtpAddresses' => false,
+			'allowUpperCaseUrlSchemes' => false,
+			'htmlLinkCreator' => function($url, $content)
+			{
+				return $this->createHtmlLink($url, $content);
+			},
+			'emailLinkCreator' => function($url, $content)
+			{
+				return $this->createEmailLink($url, $content);
+			},
+			'validTlds' => DomainStorage::getValidTlds(),
+		];
+
+		foreach ($default_options as $key => $value)
+		{
+			if ( array_key_exists($key, $options) )
+			{
+				$this->$key = $options[$key];
+			}
+			else
+			{
+				$this->$key = $value;
+			}
+		}
+	}
 
 	/**
 	 * @param bool $allowFtpAddresses
@@ -83,14 +119,6 @@ final class UrlLinker implements UrlLinkerInterface
 	 */
 	public function getHtmlLinkCreator()
 	{
-		if ( $this->htmlLinkCreator === null )
-		{
-			$this->htmlLinkCreator = function($url, $content)
-			{
-				return $this->createHtmlLink($url, $content);
-			};
-		}
-
 		return $this->htmlLinkCreator;
 	}
 
@@ -110,14 +138,6 @@ final class UrlLinker implements UrlLinkerInterface
 	 */
 	public function getEmailLinkCreator()
 	{
-		if ( $this->emailLinkCreator === null )
-		{
-			$this->emailLinkCreator = function($url, $content)
-			{
-				return $this->createEmailLink($url, $content);
-			};
-		}
-
 		return $this->emailLinkCreator;
 	}
 
@@ -137,11 +157,6 @@ final class UrlLinker implements UrlLinkerInterface
 	 */
 	public function getValidTlds()
 	{
-		if ( $this->validTlds === null )
-		{
-			$this->validTlds = DomainStorage::getValidTlds();
-		}
-
 		return $this->validTlds;
 	}
 
