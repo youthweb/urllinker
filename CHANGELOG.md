@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 - new constructor in `Youthweb\UrlLinker\UrlLinker` for configuration
+- add `.gitattributes` file
 
 ### Deprecated
 - Deprecated `Youthweb\UrlLinker\UrlLinker::setAllowFtpAddresses()`
