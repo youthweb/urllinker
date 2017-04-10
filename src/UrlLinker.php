@@ -7,12 +7,12 @@ final class UrlLinker implements UrlLinkerInterface
 	/**
 	 * @var bool
 	 */
-	private $allowFtpAddresses = false;
+	private $allowFtpAddresses;
 
 	/**
 	 * @var bool
 	 */
-	private $allowUpperCaseUrlSchemes = false;
+	private $allowUpperCaseUrlSchemes;
 
 	/**
 	 * @var Closure
@@ -30,117 +30,181 @@ final class UrlLinker implements UrlLinkerInterface
 	private $validTlds;
 
 	/**
+	 * Set the configuration
+	 *
+	 * @since v1.1.0
+	 * @param array $options Configuation array
+	 * @return self
+	 */
+	public function __construct(array $options = [])
+	{
+		$default_options = [
+			'allowFtpAddresses' => false,
+			'allowUpperCaseUrlSchemes' => false,
+			'htmlLinkCreator' => function($url, $content)
+			{
+				return $this->createHtmlLink($url, $content);
+			},
+			'emailLinkCreator' => function($url, $content)
+			{
+				return $this->createEmailLink($url, $content);
+			},
+			'validTlds' => DomainStorage::getValidTlds(),
+		];
+
+		foreach ($default_options as $key => $value)
+		{
+			if ( array_key_exists($key, $options) )
+			{
+				$value = $options[$key];
+			}
+
+			switch ($key)
+			{
+				case 'allowFtpAddresses':
+					$this->setAllowFtpAddresses($value);
+					break;
+
+				case 'allowUpperCaseUrlSchemes':
+					$this->setAllowUpperCaseUrlSchemes($value);
+					break;
+
+				case 'htmlLinkCreator':
+					$this->setHtmlLinkCreator($value);
+					break;
+
+				case 'emailLinkCreator':
+					$this->setEmailLinkCreator($value);
+					break;
+
+				case 'validTlds':
+					$this->setValidTlds($value);
+					break;
+			}
+		}
+	}
+
+	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
 	 * @param bool $allowFtpAddresses
 	 * @return self
 	 */
 	public function setAllowFtpAddresses($allowFtpAddresses)
 	{
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+
 		$this->allowFtpAddresses = (bool) $allowFtpAddresses;
 
 		return $this;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0.
 	 * @return bool
 	 */
 	public function getAllowFtpAddresses()
 	{
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+
 		return $this->allowFtpAddresses;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
 	 * @param bool $allowUpperCaseUrlSchemes
 	 * @return self
 	 */
 	public function setAllowUpperCaseUrlSchemes($allowUpperCaseUrlSchemes)
 	{
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+
 		$this->allowUpperCaseUrlSchemes = (bool) $allowUpperCaseUrlSchemes;
 
 		return $this;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0.
 	 * @return bool
 	 */
 	public function getAllowUpperCaseUrlSchemes()
 	{
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+
 		return $this->allowUpperCaseUrlSchemes;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
 	 * @param Closure $creator
 	 * @return self
 	 */
 	public function setHtmlLinkCreator(\Closure $creator)
 	{
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+
 		$this->htmlLinkCreator = $creator;
 
 		return $this;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0.
 	 * @return Closure
 	 */
 	public function getHtmlLinkCreator()
 	{
-		if ( $this->htmlLinkCreator === null )
-		{
-			$this->htmlLinkCreator = function($url, $content)
-			{
-				return $this->createHtmlLink($url, $content);
-			};
-		}
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
 
 		return $this->htmlLinkCreator;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
 	 * @param Closure $creator
 	 * @return self
 	 */
 	public function setEmailLinkCreator(\Closure $creator)
 	{
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+
 		$this->emailLinkCreator = $creator;
 
 		return $this;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0.
 	 * @return Closure
 	 */
 	public function getEmailLinkCreator()
 	{
-		if ( $this->emailLinkCreator === null )
-		{
-			$this->emailLinkCreator = function($url, $content)
-			{
-				return $this->createEmailLink($url, $content);
-			};
-		}
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
 
 		return $this->emailLinkCreator;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
 	 * @param array $validTlds
 	 * @return self
 	 */
 	public function setValidTlds(array $validTlds)
 	{
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+
 		$this->validTlds = $validTlds;
 
 		return $this;
 	}
 
 	/**
+	 * @deprecated since version 1.1, to be set to private in 2.0.
 	 * @return bool
 	 */
 	public function getValidTlds()
 	{
-		if ( $this->validTlds === null )
-		{
-			$this->validTlds = DomainStorage::getValidTlds();
-		}
+		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
 
 		return $this->validTlds;
 	}

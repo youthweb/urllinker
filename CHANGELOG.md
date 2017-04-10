@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- new constructor in `Youthweb\UrlLinker\UrlLinker` for configuration
+
+### Deprecated
+- Deprecated `Youthweb\UrlLinker\UrlLinker::setAllowFtpAddresses()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::getAllowFtpAddresses()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::setAllowUpperCaseUrlSchemes()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::getAllowUpperCaseUrlSchemes()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::setHtmlLinkCreator()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::getHtmlLinkCreator()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::setEmailLinkCreator()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::getEmailLinkCreator()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::setValidTlds()`
+- Deprecated `Youthweb\UrlLinker\UrlLinker::getValidTlds()`
+
 ## [1.0] - 2016-09-05
 
 ### Added
