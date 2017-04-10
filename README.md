@@ -35,7 +35,7 @@ $config = [
     'allowFtpAddresses' => true,
 
     // Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
-    'setAllowUpperCaseUrlSchemes' => true,
+    'allowUpperCaseUrlSchemes' => true,
 
     // Add a Closure to modify the way the urls will be linked:
     'htmlLinkCreator' => function($url, $content)
@@ -53,7 +53,7 @@ $config = [
     'emailLinkCreator' => function($email, $content) { return $email; },
 
     // You can customize the recognizable Top Level Domains:
-    'validTlds' => ['.local' => true],
+    'validTlds' => ['.localhost' => true],
 ];
 
 $urlLinker = new Youthweb\UrlLinker\UrlLinker($config);
@@ -65,9 +65,9 @@ $urlLinker = new Youthweb\UrlLinker\UrlLinker($config);
   - Recognized URL schemes: "http" and "https"
     - The `http://` prefix is optional.
     - Support for additional schemes, e.g. "ftp", can easily be added by
-      setting `setAllowFtpAddresses(true)`.
+      setting `allowFtpAddresses` to `true`.
     - The scheme must be written in lower case. This requirement can be lifted
-      by setting `setAllowUpperCaseUrlSchemes(true)`.
+      by setting `allowUpperCaseUrlSchemes` to `true`.
   - Hosts may be specified using domain names or IPv4 addresses.
     - IPv6 addresses are not supported.
   - Port numbers are allowed.
@@ -82,9 +82,9 @@ $urlLinker = new Youthweb\UrlLinker\UrlLinker($config);
     - Internationalized *top-level* domain names must be written in Punycode in
       order to be recognized.
     - If you want to support only some specific TLD you can set them with
-      `setValidTlds(['.com' => true, '.net' => true])`
+      `validTlds` e.g. `['.com' => true, '.net' => true]`.
     - If you need to support unqualified domain names, such as `localhost`,
-      you can also set them with `setValidTlds(['.localhost' => true])`
+      you can also set them with `['.localhost' => true]` in `validTlds`.
 - Email addresses
   - Supports the full range of commonly used address formats, including "plus
     addresses" (as popularized by Gmail).
@@ -93,7 +93,7 @@ $urlLinker = new Youthweb\UrlLinker\UrlLinker($config);
   - Simplistic spam protection: The at-sign is converted to a HTML entity,
     foiling naive email address harvesters.
   - If you don't want to link emails you can set closure that simply returns the
-    raw email with `setEmailLinkCreator(function($email, $content) { return $email; })`
+    raw email with a closure `function($email, $content) { return $email; }` in `emailLinkCreator`.
 - Addresses are recognized correctly in normal sentence contexts. For instance,
   in "Visit stackoverflow.com.", the final period is not part of the URL.
 - User input is properly sanitized to prevent [cross-site scripting](http://en.wikipedia.org/wiki/Cross-site_scripting) (XSS),
