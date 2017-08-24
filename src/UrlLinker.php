@@ -62,23 +62,27 @@ final class UrlLinker implements UrlLinkerInterface
 			switch ($key)
 			{
 				case 'allowFtpAddresses':
-					$this->setAllowFtpAddresses($value);
+					$this->allowFtpAddresses = (bool) $value;
 					break;
 
 				case 'allowUpperCaseUrlSchemes':
-					$this->setAllowUpperCaseUrlSchemes($value);
+					$this->allowUpperCaseUrlSchemes = (bool) $value;
 					break;
 
 				case 'htmlLinkCreator':
-					$this->setHtmlLinkCreator($value);
+ 					if ( !is_callable($value) )
+						throw new InvalidArgumentException('The value of the htmlLinkCreator option must be callable.');
+					$this->htmlLinkCreator = $value;
 					break;
 
 				case 'emailLinkCreator':
-					$this->setEmailLinkCreator($value);
+					if ( !is_callable($value) )
+						throw new InvalidArgumentException('The value of the emailLinkCreator option must be callable.');
+					$this->emailLinkCreator = $value;
 					break;
 
 				case 'validTlds':
-					$this->setValidTlds($value);
+					$this->validTlds = (array) $value;
 					break;
 			}
 		}
@@ -248,7 +252,7 @@ final class UrlLinker implements UrlLinkerInterface
 			// Check that the TLD is valid or that $domain is an IP address.
 			$tld = strtolower(strrchr($domain, '.'));
 
-			$validTlds = $this->getValidTlds();
+			$validTlds = $this->validTlds;
 
 			if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld]))
 			{
@@ -267,7 +271,7 @@ final class UrlLinker implements UrlLinkerInterface
 				if ( ! $scheme && $username && ! $password && ! $afterDomain )
 				{
 					// Looks like an email address.
-					$emailLinkCreator = $this->getEmailLinkCreator();
+					$emailLinkCreator = $this->emailLinkCreator;
 
 					// Add the hyperlink.
 					$html .= $emailLinkCreator($url, $url);
@@ -278,7 +282,7 @@ final class UrlLinker implements UrlLinkerInterface
 					$completeUrl = $scheme ? $url : "http://$url";
 					$linkText = "$domain$port$path";
 
-					$htmlLinkCreator = $this->getHtmlLinkCreator();
+					$htmlLinkCreator = $this->htmlLinkCreator;
 
 					// Add the hyperlink.
 					$html .= $htmlLinkCreator($completeUrl, $linkText);
@@ -368,7 +372,7 @@ final class UrlLinker implements UrlLinkerInterface
 		 */
 		$rexScheme = 'https?://';
 
-		if ( $this->getAllowFtpAddresses() )
+		if ( $this->allowFtpAddresses )
 		{
 			$rexScheme .= '|ftp://';
 		}
@@ -387,7 +391,7 @@ final class UrlLinker implements UrlLinkerInterface
 
 		$rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
 
-		if ( $this->getAllowUpperCaseUrlSchemes() )
+		if ( $this->allowUpperCaseUrlSchemes )
 		{
 			$rexUrlLinker .= 'i';
 		}
