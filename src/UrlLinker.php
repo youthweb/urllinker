@@ -2,6 +2,8 @@
 
 namespace Youthweb\UrlLinker;
 
+use InvalidArgumentException;
+
 final class UrlLinker implements UrlLinkerInterface
 {
 	/**
@@ -70,14 +72,20 @@ final class UrlLinker implements UrlLinkerInterface
 					break;
 
 				case 'htmlLinkCreator':
- 					if ( !is_callable($value) )
+					if ( ! is_callable($value) )
+					{
 						throw new InvalidArgumentException('The value of the htmlLinkCreator option must be callable.');
+					}
+
 					$this->htmlLinkCreator = $value;
 					break;
 
 				case 'emailLinkCreator':
-					if ( !is_callable($value) )
+					if ( ! is_callable($value) )
+					{
 						throw new InvalidArgumentException('The value of the emailLinkCreator option must be callable.');
+					}
+
 					$this->emailLinkCreator = $value;
 					break;
 

@@ -2,9 +2,10 @@
 
 namespace Youthweb\UrlLinker\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use Youthweb\UrlLinker\DomainStorage;
 
-class DomainStorageTest extends \PHPUnit\Framework\TestCase
+class DomainStorageTest extends TestCase
 {
 	public function testGetValidTlds()
 	{

@@ -2,10 +2,15 @@
 
 namespace Youthweb\UrlLinker\Tests\Unit;
 
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 use Youthweb\UrlLinker\UrlLinker;
 
-class UrlLinkerTest extends \PHPUnit\Framework\TestCase
+class UrlLinkerTest extends TestCase
 {
+	/**
+	 * @test UrlLinker implements UrlLinkerInterface
+	 */
 	public function testItImplementsUrlLinkerInterface()
 	{
 		$urlLinker = new UrlLinker();
@@ -16,6 +21,36 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 		$this->assertFalse($urlLinker->getAllowFtpAddresses());
 		// @deprecated since version 1.1, to be removed in 2.0.
 		$this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
+	}
+
+	/**
+	 * @test UrlLinker throws Exception with wrong htmlLinkCreator
+	 */
+	public function throwExceptionWithWrongHtmllinkcreator()
+	{
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('The value of the htmlLinkCreator option must be callable.');
+
+		$config = [
+			'htmlLinkCreator' => 'this must be a Closure',
+		];
+
+		$urlLinker = new UrlLinker($config);
+	}
+
+	/**
+	 * @test UrlLinker throws Exception with wrong emailLinkCreator
+	 */
+	public function throwExceptionWithWrongEmaillinkcreator()
+	{
+		$this->expectException(InvalidArgumentException::class);
+		$this->expectExceptionMessage('The value of the emailLinkCreator option must be callable.');
+
+		$config = [
+			'emailLinkCreator' => 'this must be a Closure',
+		];
+
+		$urlLinker = new UrlLinker($config);
 	}
 
 	/**

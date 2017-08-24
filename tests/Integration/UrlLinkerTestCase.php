@@ -2,7 +2,9 @@
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
-abstract class UrlLinkerTestCase extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+abstract class UrlLinkerTestCase extends TestCase
 {
 	/**
 	 * @return array
