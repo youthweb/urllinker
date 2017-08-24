@@ -27,8 +27,8 @@
 		}
 	},
 	"autoload-dev": {
-		"files": [
-			"tests/integration/UrlLinkerTestCase.php"
-		]
+		"psr-4": {
+			"Youthweb\\UrlLinker\\Tests\\": "tests"
+		}
 	}
 }
