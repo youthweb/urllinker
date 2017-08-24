@@ -54,6 +54,82 @@ class UrlLinkerTest extends TestCase
 	}
 
 	/**
+	 * @test Closures are allowed as htmlLinkCreator
+	 */
+	public function allowClosureAsHtmllinkcreator()
+	{
+		$config = [
+			'htmlLinkCreator' => function() {},
+		];
+
+		$urlLinker = new UrlLinker($config);
+
+		// Workaround to test that NO Exception is thrown
+		// @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+		$this->assertTrue(
+			true,
+			'Return type ensures this assertion is never reached on failure'
+		);
+	}
+
+	/**
+	 * @test Closures are allowed as emailLinkCreator
+	 */
+	public function allowClosureAsEmaillinkcreator()
+	{
+		$config = [
+			'emailLinkCreator' => function() {},
+		];
+
+		$urlLinker = new UrlLinker($config);
+
+		// Workaround to test that NO Exception is thrown
+		// @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+		$this->assertTrue(
+			true,
+			'Return type ensures this assertion is never reached on failure'
+		);
+	}
+
+	/**
+	 * @test Callables are allowed as htmlLinkCreator
+	 */
+	public function allowCallableAsHtmllinkcreator()
+	{
+		$config = [
+			'htmlLinkCreator' => [$this, '__construct'],
+		];
+
+		$urlLinker = new UrlLinker($config);
+
+		// Workaround to test that NO Exception is thrown
+		// @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+		$this->assertTrue(
+			true,
+			'Return type ensures this assertion is never reached on failure'
+		);
+	}
+
+	/**
+	 * @test Callables are allowed as emailLinkCreator
+	 */
+	public function allowCallableAsEmaillinkcreator()
+	{
+		$config = [
+			'emailLinkCreator' => [$this, '__construct'],
+		];
+
+		$urlLinker = new UrlLinker($config);
+
+		// Workaround to test that NO Exception is thrown
+		// @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+		$this->assertTrue(
+			true,
+			'Return type ensures this assertion is never reached on failure'
+		);
+	}
+
+	/**
 	 * @deprecated since version 1.1, to be removed in 2.0.
 	 */
 	public function testAllowFtpAddressesConfig()

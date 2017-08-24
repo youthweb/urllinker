@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- config `htmlLinkCreator` in `__construct()` can be a callable
+- config `emailLinkCreator` in `__construct()` can be a callable
+
 ### Changed
 - Updated the IANA TLD list with ~50 more domains
 - The test files following PSR-4

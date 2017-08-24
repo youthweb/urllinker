@@ -2,6 +2,7 @@
 
 namespace Youthweb\UrlLinker;
 
+use Closure;
 use InvalidArgumentException;
 
 final class UrlLinker implements UrlLinkerInterface
@@ -151,7 +152,7 @@ final class UrlLinker implements UrlLinkerInterface
 	 * @param Closure $creator
 	 * @return self
 	 */
-	public function setHtmlLinkCreator(\Closure $creator)
+	public function setHtmlLinkCreator(Closure $creator)
 	{
 		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
 
@@ -176,7 +177,7 @@ final class UrlLinker implements UrlLinkerInterface
 	 * @param Closure $creator
 	 * @return self
 	 */
-	public function setEmailLinkCreator(\Closure $creator)
+	public function setEmailLinkCreator(Closure $creator)
 	{
 		@trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
 
