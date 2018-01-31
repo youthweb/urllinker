@@ -2,7 +2,7 @@
 	"name": "youthweb/urllinker",
 	"description": "Autolink URLs in text or html",
 	"type": "library",
-	"license": "GPL3",
+	"license": "GPL-3.0-or-later",
 	"homepage": "https://github.com/youthweb",
 	"authors": [
 		{
