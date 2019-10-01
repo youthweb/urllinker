@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Added support for PHP 7.3
+- Update the IANA TLD list with 20 domains less
+- Add support for PHP 7.3
 
 ### Changed
 

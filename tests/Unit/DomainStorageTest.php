@@ -28,7 +28,7 @@ class DomainStorageTest extends TestCase
     {
         $tlds = DomainStorage::getValidTlds();
 
-        $this->assertCount(1547, $tlds);
+        $this->assertCount(1527, $tlds);
 
         $this->assertSame(['.aaa' => true], array_slice($tlds, 0, 1));
     }
