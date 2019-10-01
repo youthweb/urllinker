@@ -21,20 +21,20 @@ namespace Youthweb\UrlLinker;
 
 final class DomainStorage
 {
-	/**
-	 * String with all valid TLDs
-	 *
-	 * Since the set of valid TLDs is not static, this list should be updated
-	 * from time to time.
-	 *
-	 * List source:  http://data.iana.org/TLD/tlds-alpha-by-domain.txt
-	 * Last updated: 2017-08-24
-	 *
-	 * # Version 2017082300, Last Updated Wed Aug 23 07:07:02 2017 UTC
-	 *
-	 * @var string
-	 */
-	private static $rawValidTlds = 'AAA
+    /**
+     * String with all valid TLDs
+     *
+     * Since the set of valid TLDs is not static, this list should be updated
+     * from time to time.
+     *
+     * List source:  http://data.iana.org/TLD/tlds-alpha-by-domain.txt
+     * Last updated: 2017-08-24
+     *
+     * # Version 2017082300, Last Updated Wed Aug 23 07:07:02 2017 UTC
+     *
+     * @var string
+     */
+    private static $rawValidTlds = 'AAA
 AARP
 ABARTH
 ABB
@@ -1582,32 +1582,30 @@ ZONE
 ZUERICH
 ZW';
 
-	/**
-	 * Associative array mapping valid TLDs to the value true.
-	 *
-	 * @var string
-	 */
-	private static $validTlds;
+    /**
+     * Associative array mapping valid TLDs to the value true.
+     *
+     * @var string
+     */
+    private static $validTlds;
 
-	/**
-	 * @return array
-	 */
-	public static function getValidTlds()
-	{
-		if ( ! static::$validTlds )
-		{
-			$validTlds = explode("\n", static::$rawValidTlds);
+    /**
+     * @return array
+     */
+    public static function getValidTlds()
+    {
+        if (! static::$validTlds) {
+            $validTlds = explode("\n", static::$rawValidTlds);
 
-			$clean = function($value)
-			{
-				return '.' . trim(strtolower($value));
-			};
+            $clean = function ($value) {
+                return '.' . trim(strtolower($value));
+            };
 
-			$validTlds = array_map($clean, $validTlds);
+            $validTlds = array_map($clean, $validTlds);
 
-			static::$validTlds = array_fill_keys($validTlds, true);
-		}
+            static::$validTlds = array_fill_keys($validTlds, true);
+        }
 
-		return static::$validTlds;
-	}
+        return static::$validTlds;
+    }
 }

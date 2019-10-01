@@ -1,26 +1,29 @@
 language: php
-
-matrix:
-  include:
-    - php: 7.2
-      env: COLLECT_COVERAGE=true
-    - php: 7.3
-
 sudo: false
+
+php:
+  - 7.3
+  - 7.2
+env:
+matrix:
+  fast_finish: true
+  include:
+    - php: nightly
+    - env: COLLECT_COVERAGE=true
+  allow_failures:
+    - php: nightly
+    - env: COLLECT_COVERAGE=true
 
 cache:
   directories:
     - $HOME/.composer/cache
 
-before_install:
-- travis_retry composer self-update
-
 install:
 - travis_retry composer install --no-interaction --prefer-dist
-- composer require satooshi/php-coveralls --dev --prefer-dist
+- composer require php-coveralls/php-coveralls:^2 --dev --prefer-dist
 
 script:
-- if [[ "$COLLECT_COVERAGE" == "true" ]]; then php vendor/phpunit/phpunit/phpunit --coverage-clover build/logs/clover.xml; else php vendor/phpunit/phpunit/phpunit; fi
+- if [[ "$COLLECT_COVERAGE" == "true" ]]; then php vendor/bin/phpunit --coverage-clover build/logs/clover.xml; else php vendor/bin/phpunit --no-coverage; fi
 
 after_script:
-- if [[ "$COLLECT_COVERAGE" == "true" ]]; then php vendor/bin/coveralls; fi
+- if [[ "$COLLECT_COVERAGE" == "true" ]]; then php vendor/bin/php-coveralls; fi

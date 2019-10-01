@@ -24,12 +24,12 @@ use Youthweb\UrlLinker\DomainStorage;
 
 class DomainStorageTest extends TestCase
 {
-	public function testGetValidTlds()
-	{
-		$tlds = DomainStorage::getValidTlds();
+    public function testGetValidTlds()
+    {
+        $tlds = DomainStorage::getValidTlds();
 
-		$this->assertCount(1547, $tlds);
+        $this->assertCount(1547, $tlds);
 
-		$this->assertSame(['.aaa' => true], array_slice($tlds, 0, 1));
-	}
+        $this->assertSame(['.aaa' => true], array_slice($tlds, 0, 1));
+    }
 }

@@ -23,57 +23,61 @@ use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 {
-	/**
-	 * @var UrlLinker
-	 */
-	private $urlLinker;
+    /**
+     * @var UrlLinker
+     */
+    private $urlLinker;
 
-	protected function setUp()
-	{
-		$this->urlLinker = new UrlLinker();
-	}
+    protected function setUp()
+    {
+        $this->urlLinker = new UrlLinker();
+    }
 
-	/**
-	 * @dataProvider provideTextsWithFtpLinksWithoutHtml
-	 *
-	 * @param string $text
-	 */
-	public function testFtpUrlsGetLinkedInText($text, $expectedLinked, $message = null)
-	{
-		$this->urlLinker = new UrlLinker([
-			'allowFtpAddresses' => true,
-		]);
+    /**
+     * @dataProvider provideTextsWithFtpLinksWithoutHtml
+     *
+     * @param string     $text
+     * @param mixed      $expectedLinked
+     * @param null|mixed $message
+     */
+    public function testFtpUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    {
+        $this->urlLinker = new UrlLinker([
+            'allowFtpAddresses' => true,
+        ]);
 
-		$this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
-	}
+        $this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
+    }
 
-	/**
-	 * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
-	 *
-	 * @param string $text
-	 */
-	public function testUppercaseUrlsGetLinkedInText($text, $expectedLinked, $message = null)
-	{
-		$this->urlLinker = new UrlLinker([
-			'allowUpperCaseUrlSchemes' => true,
-		]);
+    /**
+     * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
+     *
+     * @param string     $text
+     * @param mixed      $expectedLinked
+     * @param null|mixed $message
+     */
+    public function testUppercaseUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    {
+        $this->urlLinker = new UrlLinker([
+            'allowUpperCaseUrlSchemes' => true,
+        ]);
 
-		$this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
-	}
+        $this->testUrlsGetLinkedInText($text, $expectedLinked, $message);
+    }
 
-	/**
-	 * @dataProvider provideTextsNotContainingAnyUrls
-	 *
-	 * @param string $text
-	 */
-	public function testTextNotContainingAnyUrlsRemainsTheSame($text)
-	{
-		$this->assertSame($text, $this->urlLinker->linkUrlsAndEscapeHtml($text));
-	}
+    /**
+     * @dataProvider provideTextsNotContainingAnyUrls
+     *
+     * @param string $text
+     */
+    public function testTextNotContainingAnyUrlsRemainsTheSame($text)
+    {
+        $this->assertSame($text, $this->urlLinker->linkUrlsAndEscapeHtml($text));
+    }
 
-	public function testExample()
-	{
-		$text = <<<EOD
+    public function testExample()
+    {
+        $text = <<<EOD
 Here's an e-mail-address:bob+test@example.org. Here's an authenticated URL: http://skroob:12345@example.com.
 Here are some URLs:
 stackoverflow.com/questions/1188129/pregreplace-to-detect-html-php
@@ -94,7 +98,7 @@ We need to support IDNs and IRIs and röck döts:
 møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي.
 EOD;
 
-		$expected = <<<EOD
+        $expected = <<<EOD
 Here's an e-mail-address:<a href="mailto:bob+test&#64;example.org">bob+test&#64;example.org</a>. Here's an authenticated URL: <a href="http://skroob:12345&#64;example.com">example.com</a>.
 Here are some URLs:
 <a href="http://stackoverflow.com/questions/1188129/pregreplace-to-detect-html-php">stackoverflow.com/questions/1188129/pregreplace-to-detect-html-php</a>
@@ -115,72 +119,72 @@ We need to support IDNs and IRIs and röck döts:
 <a href="http://møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي">møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي</a>.
 EOD;
 
-		$this->assertSame($expected, $this->urlLinker->linkUrlsAndEscapeHtml($text));
-	}
+        $this->assertSame($expected, $this->urlLinker->linkUrlsAndEscapeHtml($text));
+    }
 
-	/**
-	 * @dataProvider provideTextsWithLinksWithoutHtml
-	 *
-	 * @param string	  $text
-	 * @param string	  $expectedLinked
-	 * @param string|null $message
-	 */
-	public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null)
-	{
-		$this->assertSame(
-			$expectedLinked,
-			$this->urlLinker->linkUrlsAndEscapeHtml($text),
-			'Simple case: '.$message
-		);
+    /**
+     * @dataProvider provideTextsWithLinksWithoutHtml
+     *
+     * @param string      $text
+     * @param string      $expectedLinked
+     * @param string|null $message
+     */
+    public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    {
+        $this->assertSame(
+            $expectedLinked,
+            $this->urlLinker->linkUrlsAndEscapeHtml($text),
+            'Simple case: ' . $message
+        );
 
-		$this->assertSame(
-			sprintf('foo %s bar', $expectedLinked),
-			$this->urlLinker->linkUrlsAndEscapeHtml(sprintf('foo %s bar', $text)),
-			'Text around: '.$message
-		);
+        $this->assertSame(
+            sprintf('foo %s bar', $expectedLinked),
+            $this->urlLinker->linkUrlsAndEscapeHtml(sprintf('foo %s bar', $text)),
+            'Text around: ' . $message
+        );
 
-		// html should get encoded
-		$this->assertSame(
-			sprintf('&lt;div class=&quot;test&quot;&gt; %s &lt;/div&gt;', $expectedLinked),
-			$this->urlLinker->linkUrlsAndEscapeHtml(sprintf('<div class="test"> %s </div>', $text)),
-			'Html around: '.$message
-		);
-	}
+        // html should get encoded
+        $this->assertSame(
+            sprintf('&lt;div class=&quot;test&quot;&gt; %s &lt;/div&gt;', $expectedLinked),
+            $this->urlLinker->linkUrlsAndEscapeHtml(sprintf('<div class="test"> %s </div>', $text)),
+            'Html around: ' . $message
+        );
+    }
 
-	/**
-	 * @dataProvider provideTextsWithHtml
-	 *
-	 * @param string	  $text
-	 * @param string	  $expectedLinked
-	 * @param string|null $message
-	 */
-	public function testHtmlInText($text, $expectedLinked, $message = null)
-	{
-		$this->urlLinker = new UrlLinker([
-			'allowUpperCaseUrlSchemes' => true,
-		]);
+    /**
+     * @dataProvider provideTextsWithHtml
+     *
+     * @param string      $text
+     * @param string      $expectedLinked
+     * @param string|null $message
+     */
+    public function testHtmlInText($text, $expectedLinked, $message = null)
+    {
+        $this->urlLinker = new UrlLinker([
+            'allowUpperCaseUrlSchemes' => true,
+        ]);
 
-		$this->testUrlsGetLinkedInText($text, $expectedLinked);
-	}
+        $this->testUrlsGetLinkedInText($text, $expectedLinked);
+    }
 
-	/**
-	 * provide html in text
-	 */
-	public function provideTextsWithHtml()
-	{
-		return array(
-			array(
-				'http://example.com?a=b&c=d',
-				$this->link('http://example.com?a=b&amp;c=d', 'example.com'),
-			),
-			array(
-				'http://example.com?a=b&amp%3bc=d',
-				$this->link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
-			),
-			array(
-				'http://example.com?a=b&amp;c=d',
-				$this->link('http://example.com?a=b&amp;c=d', 'example.com'),
-			),
-		);
-	}
+    /**
+     * provide html in text
+     */
+    public function provideTextsWithHtml()
+    {
+        return [
+            [
+                'http://example.com?a=b&c=d',
+                $this->link('http://example.com?a=b&amp;c=d', 'example.com'),
+            ],
+            [
+                'http://example.com?a=b&amp%3bc=d',
+                $this->link('http://example.com?a=b&amp;amp%3bc=d', 'example.com'),
+            ],
+            [
+                'http://example.com?a=b&amp;c=d',
+                $this->link('http://example.com?a=b&amp;c=d', 'example.com'),
+            ],
+        ];
+    }
 }
