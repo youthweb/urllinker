@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.0] - 2019-10-10
+
 ### Added
 
 - Update the IANA TLD list with 20 domains less
@@ -73,7 +75,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Do not encode html characters twice
 - Licensed under GPL3
 
-[Unreleased]: https://github.com/youthweb/urllinker/compare/1.2.0...HEAD
+[Unreleased]: https://github.com/youthweb/urllinker/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/youthweb/urllinker/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/youthweb/urllinker/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/youthweb/urllinker/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/youthweb/urllinker/compare/a173dfe2f6ff5a4423612b423323e94b5d2f58e2...1.0.0
