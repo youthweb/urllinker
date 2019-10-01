@@ -28,7 +28,7 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
      */
     private $urlLinker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlLinker = new UrlLinker();
     }
