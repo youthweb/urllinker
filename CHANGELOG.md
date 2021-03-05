@@ -5,9 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased](https://github.com/youthweb/urllinker/compare/1.3.0...master)
 
-## [1.3.0] - 2019-10-10
+### Added
+
+- Add support for PHP 7.4 and PHP 8.0
+
+### Changed
+
+- Update the IANA TLD list
+- Drop support for PHP 7.2 and 7.3
+
+## [1.3.0](https://github.com/youthweb/urllinker/compare/1.2.0...1.3.0) - 2019-10-10
 
 ### Added
 
@@ -19,7 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Drop support for PHP 5.6, 7.0 and 7.1
 - Change Code Style to PSR-2
 
-## [1.2.0] - 2017-08-24
+## [1.2.0](https://github.com/youthweb/urllinker/compare/1.1.0...1.2.0) - 2017-08-24
 
 ### Added
 
@@ -36,7 +45,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added a missing `use` for `InvalidArgumentException`
 - Don't use deprecated methods internally
 
-## [1.1.0] - 2017-04-10
+## [1.1.0](https://github.com/youthweb/urllinker/compare/1.0.0...1.1.0) - 2017-04-10
 
 ### Added
 
@@ -56,7 +65,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Deprecated `Youthweb\UrlLinker\UrlLinker::setValidTlds()`
 - Deprecated `Youthweb\UrlLinker\UrlLinker::getValidTlds()`
 
-## [1.0.0] - 2016-09-05
+## [1.0.0](https://github.com/youthweb/urllinker/compare/a173dfe2f6ff5a4423612b423323e94b5d2f58e2...1.0.0) - 2016-09-05
 
 ### Added
 
@@ -74,9 +83,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Moved the config from the constructor to their own getter and setter methods
 - Do not encode html characters twice
 - Licensed under GPL3
-
-[Unreleased]: https://github.com/youthweb/urllinker/compare/1.3.0...HEAD
-[1.3.0]: https://github.com/youthweb/urllinker/compare/1.2.0...1.3.0
-[1.2.0]: https://github.com/youthweb/urllinker/compare/1.1.0...1.2.0
-[1.1.0]: https://github.com/youthweb/urllinker/compare/1.0.0...1.1.0
-[1.0.0]: https://github.com/youthweb/urllinker/compare/a173dfe2f6ff5a4423612b423323e94b5d2f58e2...1.0.0
