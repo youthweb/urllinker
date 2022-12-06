@@ -2,12 +2,11 @@
 
 [![Latest Version](https://img.shields.io/github/release/youthweb/urllinker.svg)](https://github.com/youthweb/urllinker/releases)
 [![Software License](https://img.shields.io/badge/license-GPL3-brightgreen.svg)](LICENSE.md)
-[![Build Status](https://travis-ci.org/youthweb/urllinker.svg?branch=master)](https://travis-ci.org/youthweb/urllinker)
-[![Coverage Status](https://coveralls.io/repos/github/youthweb/urllinker/badge.svg?branch=master)](https://coveralls.io/github/youthweb/urllinker?branch=master)
+[![Build Status](https://github.com/youthweb/urllinker/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/youthweb/urllinker/actions)
 
 UrlLinker converts any web addresses in plain text into HTML hyperlinks.
 
-This is a fork of the great work of [Kwi\UrlLinker](https://bitbucket.org/kwi/urllinker).
+This is a fork of the great work of [Kwi\UrlLinker](https://github.com/kwi-dk/UrlLinker), formerly on [Bitbucket](https://bitbucket.org/kwi/urllinker).
 
 ## Install
 
@@ -22,9 +21,9 @@ $ composer require youthweb/urllinker
 ```php
 $urlLinker = new Youthweb\UrlLinker\UrlLinker();
 
-$urlLinker->linkUrlsAndEscapeHtml($text);
+$linkedText = $urlLinker->linkUrlsAndEscapeHtml($text);
 
-$urlLinker->linkUrlsInTrustedHtml($html);
+$linkedText = $urlLinker->linkUrlsInTrustedHtml($html);
 ```
 
 You can optional configure different options for parsing URLs by passing them to `UrlLinker::__construct()`:
