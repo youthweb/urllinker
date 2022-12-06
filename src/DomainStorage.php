@@ -1527,9 +1527,9 @@ ZW';
     private static $validTlds;
 
     /**
-     * @return array
+     * @return array<string,bool>
      */
-    public static function getValidTlds()
+    public static function getValidTlds(): array
     {
         if (! static::$validTlds) {
             $validTlds = explode("\n", static::$rawValidTlds);

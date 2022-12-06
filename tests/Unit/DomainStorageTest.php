@@ -24,7 +24,7 @@ use Youthweb\UrlLinker\DomainStorage;
 
 class DomainStorageTest extends TestCase
 {
-    public function testGetValidTlds()
+    public function testGetValidTlds(): void
     {
         $tlds = DomainStorage::getValidTlds();
 

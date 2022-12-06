@@ -44,6 +44,9 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private $emailLinkCreator;
 
+    /**
+     * @var array<string,bool>
+     */
     private array $validTlds;
 
     /**
@@ -51,9 +54,7 @@ final class UrlLinker implements UrlLinkerInterface
      *
      * @since v1.1.0
      *
-     * @param array $options Configuation array
-     *
-     * @return self
+     * @param array<string,mixed> $options Configuation array
      */
     public function __construct(array $options = [])
     {
@@ -226,11 +227,9 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
      *
-     * @param array $validTlds
-     *
-     * @return self
+     * @param array<string,bool> $validTlds
      */
-    public function setValidTlds(array $validTlds)
+    public function setValidTlds(array $validTlds): self
     {
         @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
 
@@ -242,9 +241,9 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
      *
-     * @return array
+     * @return array<string,bool>
      */
-    public function getValidTlds()
+    public function getValidTlds(): array
     {
         @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
 
@@ -256,10 +255,8 @@ final class UrlLinker implements UrlLinkerInterface
      * turning URLs into links.
      *
      * @param string $text
-     *
-     * @return string
      */
-    public function linkUrlsAndEscapeHtml($text)
+    public function linkUrlsAndEscapeHtml(string $text): string
     {
         // We can abort if there is no . in $text
         if (strpos($text, '.') === false) {
@@ -341,10 +338,8 @@ final class UrlLinker implements UrlLinkerInterface
      * a malicious user can lead to system compromise through cross-site scripting.
      *
      * @param string $html
-     *
-     * @return string
      */
-    public function linkUrlsInTrustedHtml($html)
+    public function linkUrlsInTrustedHtml(string $html): string
     {
         $reMarkup = '{</?([a-z]+)([^"\'>]|"[^"]*"|\'[^\']*\')*>|&#?[a-zA-Z0-9]+;|$}';
 
