@@ -25,14 +25,14 @@ use InvalidArgumentException;
 final class UrlLinker implements UrlLinkerInterface
 {
     /**
-     * @var bool
+     * Ftp addresses like "ftp://example.com" will be allowed, default false
      */
-    private $allowFtpAddresses;
+    private bool $allowFtpAddresses = false;
 
     /**
-     * @var bool
+     * Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
      */
-    private $allowUpperCaseUrlSchemes;
+    private bool $allowUpperCaseUrlSchemes = false;
 
     /**
      * @var Closure
@@ -44,10 +44,7 @@ final class UrlLinker implements UrlLinkerInterface
      */
     private $emailLinkCreator;
 
-    /**
-     * @var array
-     */
-    private $validTlds;
+    private array $validTlds;
 
     /**
      * Set the configuration
@@ -245,7 +242,7 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
      *
-     * @return bool
+     * @return array
      */
     public function getValidTlds()
     {

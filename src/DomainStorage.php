@@ -1522,7 +1522,7 @@ ZW';
     /**
      * Associative array mapping valid TLDs to the value true.
      *
-     * @var string
+     * @var array<string,bool>
      */
     private static $validTlds;
 
