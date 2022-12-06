@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/youthweb/urllinker/compare/1.4.0...master)
 
+### Added
+
+- Add tests for PHP 8.1 and 8.2
+
 ### Changed
 
 - Move CI tests from Travis-CI to Github Actions
