@@ -8,7 +8,9 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR12' => true,
-        '@PHP71Migration:risky' => true,
+        '@PHP74Migration' => true,
+        '@PHP74Migration:risky' => true,
+        'use_arrow_functions' => false,
     ])
     ->setFinder($finder)
 ;

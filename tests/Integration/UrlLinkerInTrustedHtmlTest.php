@@ -72,18 +72,18 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     public function testExample(): void
     {
         $html = <<<EOD
-<p>Send me an <a href="bob@example.com">e-mail</a>
-at bob@example.com.</p>
-<p>This is already a link: <a href="http://google.com">http://google.com</a></p>
-<p title='10>20'>Tricky markup...</p>
-EOD;
+            <p>Send me an <a href="bob@example.com">e-mail</a>
+            at bob@example.com.</p>
+            <p>This is already a link: <a href="http://google.com">http://google.com</a></p>
+            <p title='10>20'>Tricky markup...</p>
+            EOD;
 
         $expected = <<<EOD
-<p>Send me an <a href="bob@example.com">e-mail</a>
-at <a href="mailto:bob&#64;example.com">bob&#64;example.com</a>.</p>
-<p>This is already a link: <a href="http://google.com">http://google.com</a></p>
-<p title='10>20'>Tricky markup...</p>
-EOD;
+            <p>Send me an <a href="bob@example.com">e-mail</a>
+            at <a href="mailto:bob&#64;example.com">bob&#64;example.com</a>.</p>
+            <p>This is already a link: <a href="http://google.com">http://google.com</a></p>
+            <p title='10>20'>Tricky markup...</p>
+            EOD;
 
         $this->assertSame($expected, $this->urlLinker->linkUrlsInTrustedHtml($html));
     }

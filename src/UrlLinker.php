@@ -382,7 +382,7 @@ final class UrlLinker implements UrlLinkerInterface
         $match = [];
 
         while (preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position)) {
-            list($url, $urlPosition) = $match[0];
+            [$url, $urlPosition] = $match[0];
 
             // Add the text leading up to the URL.
             $html .= $this->escapeHtml(substr($text, $position, $urlPosition - $position));
@@ -462,7 +462,7 @@ final class UrlLinker implements UrlLinkerInterface
             $match = [];
             preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position);
 
-            list($markup, $markupPosition) = $match[0];
+            [$markup, $markupPosition] = $match[0];
 
             // Process text leading up to the markup.
             $text = substr($html, $position, $markupPosition - $position);
