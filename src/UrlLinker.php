@@ -35,14 +35,14 @@ final class UrlLinker implements UrlLinkerInterface
     private bool $allowUpperCaseUrlSchemes = false;
 
     /**
-     * @var Closure
+     * Closure to modify the way the urls will be linked
      */
-    private $htmlLinkCreator;
+    private Closure $htmlLinkCreator;
 
     /**
-     * @var Closure
+     * Closure to modify the way the emails will be linked
      */
-    private $emailLinkCreator;
+    private Closure $emailLinkCreator;
 
     /**
      * @var array<string,bool>
@@ -87,8 +87,25 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'htmlLinkCreator':
-                    if (! is_callable($value)) {
-                        throw new InvalidArgumentException('The value of the htmlLinkCreator option must be callable.');
+                    if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
+                        @trigger_error(sprintf(
+                            'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
+                            $key,
+                            Closure::class
+                        ), \E_USER_DEPRECATED);
+
+                        $value = function(string $url, string $content) use ($value): string {
+                            return call_user_func($value, $url, $content);
+                        };
+                    }
+
+                    if (! is_object($value) or ! $value instanceof Closure) {
+                        throw new InvalidArgumentException(sprintf(
+                            'Option "%s" must be of type "%s", "%s" given.',
+                            $key,
+                            Closure::class,
+                            function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                        ));
                     }
 
                     $this->htmlLinkCreator = $value;
@@ -96,8 +113,25 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'emailLinkCreator':
-                    if (! is_callable($value)) {
-                        throw new InvalidArgumentException('The value of the emailLinkCreator option must be callable.');
+                    if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
+                        @trigger_error(sprintf(
+                            'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
+                            $key,
+                            Closure::class
+                        ), \E_USER_DEPRECATED);
+
+                        $value = function(string $url, string $content) use ($value): string {
+                            return call_user_func($value, $url, $content);
+                        };
+                    }
+
+                    if (! is_object($value) or ! $value instanceof Closure) {
+                        throw new InvalidArgumentException(sprintf(
+                            'Option "%s" must be of type "%s", "%s" given.',
+                            $key,
+                            Closure::class,
+                            function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                        ));
                     }
 
                     $this->emailLinkCreator = $value;
@@ -114,14 +148,14 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param bool $allowFtpAddresses
-     *
-     * @return self
      */
-    public function setAllowFtpAddresses($allowFtpAddresses)
+    public function setAllowFtpAddresses(bool $allowFtpAddresses): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->allowFtpAddresses = (bool) $allowFtpAddresses;
 
@@ -130,26 +164,27 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return bool
      */
-    public function getAllowFtpAddresses()
+    public function getAllowFtpAddresses(): bool
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->allowFtpAddresses;
     }
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param bool $allowUpperCaseUrlSchemes
-     *
-     * @return self
      */
-    public function setAllowUpperCaseUrlSchemes($allowUpperCaseUrlSchemes)
+    public function setAllowUpperCaseUrlSchemes(bool $allowUpperCaseUrlSchemes): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->allowUpperCaseUrlSchemes = (bool) $allowUpperCaseUrlSchemes;
 
@@ -158,26 +193,27 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return bool
      */
-    public function getAllowUpperCaseUrlSchemes()
+    public function getAllowUpperCaseUrlSchemes(): bool
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->allowUpperCaseUrlSchemes;
     }
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param Closure $creator
-     *
-     * @return self
      */
-    public function setHtmlLinkCreator(Closure $creator)
+    public function setHtmlLinkCreator(Closure $creator): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->htmlLinkCreator = $creator;
 
@@ -186,26 +222,27 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return Closure
      */
-    public function getHtmlLinkCreator()
+    public function getHtmlLinkCreator(): Closure
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->htmlLinkCreator;
     }
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param Closure $creator
-     *
-     * @return self
      */
-    public function setEmailLinkCreator(Closure $creator)
+    public function setEmailLinkCreator(Closure $creator): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->emailLinkCreator = $creator;
 
@@ -214,12 +251,13 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return Closure
      */
-    public function getEmailLinkCreator()
+    public function getEmailLinkCreator(): Closure
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->emailLinkCreator;
     }
@@ -231,7 +269,11 @@ final class UrlLinker implements UrlLinkerInterface
      */
     public function setValidTlds(array $validTlds): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->validTlds = $validTlds;
 
@@ -245,7 +287,10 @@ final class UrlLinker implements UrlLinkerInterface
      */
     public function getValidTlds(): array
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->validTlds;
     }
@@ -284,7 +329,7 @@ final class UrlLinker implements UrlLinkerInterface
             $path        = $match[7][0];
 
             // Check that the TLD is valid or that $domain is an IP address.
-            $tld = strtolower(strrchr($domain, '.'));
+            $tld = strtolower((string) strrchr($domain, '.'));
 
             $validTlds = $this->validTlds;
 
@@ -460,6 +505,7 @@ final class UrlLinker implements UrlLinkerInterface
     {
         $flags = ENT_COMPAT | ENT_HTML401;
         $encoding = ini_get('default_charset');
+        $encoding = $encoding !== false ? $encoding : null;
         $double_encode = false; // Do not double encode
 
         return htmlspecialchars($string, $flags, $encoding, $double_encode);

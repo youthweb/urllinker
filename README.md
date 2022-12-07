@@ -37,19 +37,19 @@ $config = [
     'allowUpperCaseUrlSchemes' => true,
 
     // Add a Closure to modify the way the urls will be linked:
-    'htmlLinkCreator' => function($url, $content)
+    'htmlLinkCreator' => function(string $url, string $content): string
     {
         return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
     },
 
     // Add a Closure to modify the way the emails will be linked:
-    'emailLinkCreator' => function($email, $content)
+    'emailLinkCreator' => function(string $email, string $content): string
     {
         return '<a href="mailto:' . $email . '" class="email">' . $content . '</a>';
     },
 
     // You can also disable the links for email with a closure:
-    'emailLinkCreator' => function($email, $content) { return $email; },
+    'emailLinkCreator' => function(string $email, string $content): string { return $email; },
 
     // You can customize the recognizable Top Level Domains:
     'validTlds' => ['.localhost' => true],

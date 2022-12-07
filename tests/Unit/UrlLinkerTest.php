@@ -46,7 +46,7 @@ class UrlLinkerTest extends TestCase
     public function throwExceptionWithWrongHtmllinkcreator(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value of the htmlLinkCreator option must be callable.');
+        $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "string" given.');
 
         $config = [
             'htmlLinkCreator' => 'this must be a Closure',
@@ -61,7 +61,7 @@ class UrlLinkerTest extends TestCase
     public function throwExceptionWithWrongEmaillinkcreator(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value of the emailLinkCreator option must be callable.');
+        $this->expectExceptionMessage('Option "emailLinkCreator" must be of type "Closure", "string" given.');
 
         $config = [
             'emailLinkCreator' => 'this must be a Closure',
