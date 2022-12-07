@@ -35,7 +35,7 @@
 	},
 	"scripts": {
 		"check": "vendor/bin/phpstan analyze",
-		"cs": "vendor/bin/php-cs-fixer fix",
+		"cs": "vendor/bin/php-cs-fixer fix --allow-risky=yes",
 		"test": "vendor/bin/phpunit"
 	}
 }

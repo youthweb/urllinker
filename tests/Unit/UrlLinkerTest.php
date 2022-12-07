@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
  * Copyright (C) 2016-2019  Youthweb e.V. <info@youthweb.net>
@@ -76,7 +78,7 @@ class UrlLinkerTest extends TestCase
     public function allowClosureAsHtmllinkcreator(): void
     {
         $config = [
-            'htmlLinkCreator' => function () {
+            'htmlLinkCreator' => function (): void {
             },
         ];
 
@@ -96,7 +98,7 @@ class UrlLinkerTest extends TestCase
     public function allowClosureAsEmaillinkcreator(): void
     {
         $config = [
-            'emailLinkCreator' => function () {
+            'emailLinkCreator' => function (): void {
             },
         ];
 
