@@ -1,7 +1,9 @@
 <?php
+
+declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
- * Copyright (C) 2016-2019  Youthweb e.V. <info@youthweb.net>
+ * Copyright (C) 2016-2022  Youthweb e.V. <info@youthweb.net>
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,18 +72,18 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
     public function testExample(): void
     {
         $html = <<<EOD
-<p>Send me an <a href="bob@example.com">e-mail</a>
-at bob@example.com.</p>
-<p>This is already a link: <a href="http://google.com">http://google.com</a></p>
-<p title='10>20'>Tricky markup...</p>
-EOD;
+            <p>Send me an <a href="bob@example.com">e-mail</a>
+            at bob@example.com.</p>
+            <p>This is already a link: <a href="http://google.com">http://google.com</a></p>
+            <p title='10>20'>Tricky markup...</p>
+            EOD;
 
         $expected = <<<EOD
-<p>Send me an <a href="bob@example.com">e-mail</a>
-at <a href="mailto:bob&#64;example.com">bob&#64;example.com</a>.</p>
-<p>This is already a link: <a href="http://google.com">http://google.com</a></p>
-<p title='10>20'>Tricky markup...</p>
-EOD;
+            <p>Send me an <a href="bob@example.com">e-mail</a>
+            at <a href="mailto:bob&#64;example.com">bob&#64;example.com</a>.</p>
+            <p>This is already a link: <a href="http://google.com">http://google.com</a></p>
+            <p title='10>20'>Tricky markup...</p>
+            EOD;
 
         $this->assertSame($expected, $this->urlLinker->linkUrlsInTrustedHtml($html));
     }

@@ -1,7 +1,9 @@
 <?php
+
+declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
- * Copyright (C) 2016-2019  Youthweb e.V. <info@youthweb.net>
+ * Copyright (C) 2016-2022  Youthweb e.V. <info@youthweb.net>
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -76,7 +78,7 @@ class UrlLinkerTest extends TestCase
     public function allowClosureAsHtmllinkcreator(): void
     {
         $config = [
-            'htmlLinkCreator' => function () {
+            'htmlLinkCreator' => function (): void {
             },
         ];
 
@@ -96,7 +98,7 @@ class UrlLinkerTest extends TestCase
     public function allowClosureAsEmaillinkcreator(): void
     {
         $config = [
-            'emailLinkCreator' => function () {
+            'emailLinkCreator' => function (): void {
             },
         ];
 

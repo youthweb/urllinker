@@ -1,7 +1,9 @@
 <?php
+
+declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
- * Copyright (C) 2016-2019  Youthweb e.V. <info@youthweb.net>
+ * Copyright (C) 2016-2022  Youthweb e.V. <info@youthweb.net>
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,8 +34,8 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 
         $tlds = $urlLinker->getValidTlds();
 
-        $this->assertTrue(is_array($tlds));
-        $this->assertTrue(array_key_exists('.com', $tlds));
+        $this->assertIsArray($tlds);
+        $this->assertArrayHasKey('.com', $tlds);
         $this->assertTrue($tlds['.com']);
     }
 

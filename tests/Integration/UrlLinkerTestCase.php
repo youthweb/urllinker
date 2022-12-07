@@ -1,7 +1,9 @@
 <?php
+
+declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
- * Copyright (C) 2016-2019  Youthweb e.V. <info@youthweb.net>
+ * Copyright (C) 2016-2022  Youthweb e.V. <info@youthweb.net>
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +47,7 @@ abstract class UrlLinkerTestCase extends TestCase
             // simple
             [
                 'ftp://example.com',
-                $this->link('ftp://example.com', 'example.com')
+                $this->link('ftp://example.com', 'example.com'),
             ],
         ];
     }
@@ -59,7 +61,7 @@ abstract class UrlLinkerTestCase extends TestCase
             // simple
             [
                 'HTTP://EXAMPLE.COM',
-                $this->link('HTTP://EXAMPLE.COM', 'EXAMPLE.COM')
+                $this->link('HTTP://EXAMPLE.COM', 'EXAMPLE.COM'),
             ],
         ];
     }
@@ -73,7 +75,7 @@ abstract class UrlLinkerTestCase extends TestCase
             // simple
             [
                 'example.com',
-                $this->link('http://example.com', 'example.com')
+                $this->link('http://example.com', 'example.com'),
             ],
             [
                 'http://example.com',
@@ -160,7 +162,7 @@ abstract class UrlLinkerTestCase extends TestCase
             // todo: shouldn't this get url-encoded to "http://e.com/%C5%BC%C3%B3%C5%82%C4%87"?
             [
                 'e.com/żółć',
-                $this->link('http://e.com/żółć', 'e.com/żółć')
+                $this->link('http://e.com/żółć', 'e.com/żółć'),
             ],
             // german umlaute, @see https://bitbucket.org/kwi/urllinker/issues/13/special-characters-like-seems-break-it-up
             [
@@ -175,7 +177,7 @@ abstract class UrlLinkerTestCase extends TestCase
             [
                 'e.com/%C5%BC%C3%B3%C5%82%C4%87',
                 $this->link('http://e.com/%C5%BC%C3%B3%C5%82%C4%87', 'e.com/%C5%BC%C3%B3%C5%82%C4%87'),
-                'Url should not be double encoded'
+                'Url should not be double encoded',
             ],
         ];
     }

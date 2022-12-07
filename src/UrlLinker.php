@@ -1,7 +1,9 @@
 <?php
+
+declare(strict_types=1);
 /*
  * UrlLinker converts any web addresses in plain text into HTML hyperlinks.
- * Copyright (C) 2016-2019  Youthweb e.V. <info@youthweb.net>
+ * Copyright (C) 2016-2022  Youthweb e.V. <info@youthweb.net>
 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,14 +127,14 @@ final class UrlLinker implements UrlLinkerInterface
                             Closure::class
                         ), \E_USER_DEPRECATED);
 
-                        $value = function(string $url, string $content) use ($value): string {
+                        $value = function (string $url, string $content) use ($value): string {
                             $return = call_user_func($value, $url, $content);
 
                             if (! is_string($return)) {
                                 throw new UnexpectedValueException(sprintf(
                                     'Return value of callable for "%s" must return value of type "string", "%s" given.',
                                     'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
                                 ));
                             }
 
@@ -145,7 +147,7 @@ final class UrlLinker implements UrlLinkerInterface
                             'Option "%s" must be of type "%s", "%s" given.',
                             $key,
                             Closure::class,
-                            function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
                         ));
                     }
 
@@ -169,14 +171,14 @@ final class UrlLinker implements UrlLinkerInterface
                             Closure::class
                         ), \E_USER_DEPRECATED);
 
-                        $value = function(string $url, string $content) use ($value): string {
+                        $value = function (string $url, string $content) use ($value): string {
                             $return = call_user_func($value, $url, $content);
 
                             if (! is_string($return)) {
                                 throw new UnexpectedValueException(sprintf(
                                     'Return value of callable for "%s" must return value of type "string", "%s" given.',
                                     'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
                                 ));
                             }
 
@@ -189,7 +191,7 @@ final class UrlLinker implements UrlLinkerInterface
                             'Option "%s" must be of type "%s", "%s" given.',
                             $key,
                             Closure::class,
-                            function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
                         ));
                     }
 
@@ -380,7 +382,7 @@ final class UrlLinker implements UrlLinkerInterface
         $match = [];
 
         while (preg_match($this->buildRegex(), $text, $match, PREG_OFFSET_CAPTURE, $position)) {
-            list($url, $urlPosition) = $match[0];
+            [$url, $urlPosition] = $match[0];
 
             // Add the text leading up to the URL.
             $html .= $this->escapeHtml(substr($text, $position, $urlPosition - $position));
@@ -460,7 +462,7 @@ final class UrlLinker implements UrlLinkerInterface
             $match = [];
             preg_match($reMarkup, $html, $match, PREG_OFFSET_CAPTURE, $position);
 
-            list($markup, $markupPosition) = $match[0];
+            [$markup, $markupPosition] = $match[0];
 
             // Process text leading up to the markup.
             $text = substr($html, $position, $markupPosition - $position);
