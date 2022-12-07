@@ -125,14 +125,14 @@ final class UrlLinker implements UrlLinkerInterface
                             Closure::class
                         ), \E_USER_DEPRECATED);
 
-                        $value = function(string $url, string $content) use ($value): string {
+                        $value = function (string $url, string $content) use ($value): string {
                             $return = call_user_func($value, $url, $content);
 
                             if (! is_string($return)) {
                                 throw new UnexpectedValueException(sprintf(
                                     'Return value of callable for "%s" must return value of type "string", "%s" given.',
                                     'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
                                 ));
                             }
 
@@ -145,7 +145,7 @@ final class UrlLinker implements UrlLinkerInterface
                             'Option "%s" must be of type "%s", "%s" given.',
                             $key,
                             Closure::class,
-                            function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
                         ));
                     }
 
@@ -169,14 +169,14 @@ final class UrlLinker implements UrlLinkerInterface
                             Closure::class
                         ), \E_USER_DEPRECATED);
 
-                        $value = function(string $url, string $content) use ($value): string {
+                        $value = function (string $url, string $content) use ($value): string {
                             $return = call_user_func($value, $url, $content);
 
                             if (! is_string($return)) {
                                 throw new UnexpectedValueException(sprintf(
                                     'Return value of callable for "%s" must return value of type "string", "%s" given.',
                                     'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
                                 ));
                             }
 
@@ -189,7 +189,7 @@ final class UrlLinker implements UrlLinkerInterface
                             'Option "%s" must be of type "%s", "%s" given.',
                             $key,
                             Closure::class,
-                            function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
                         ));
                     }
 
