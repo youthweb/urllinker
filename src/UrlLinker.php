@@ -77,12 +77,30 @@ final class UrlLinker implements UrlLinkerInterface
 
             switch ($key) {
                 case 'allowFtpAddresses':
-                    $this->allowFtpAddresses = (bool) $value;
+                    if (! is_bool($value)) {
+                        @trigger_error(sprintf(
+                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
+                            $key
+                        ), \E_USER_DEPRECATED);
+
+                        $value = (bool) $value;
+                    }
+
+                    $this->allowFtpAddresses = $value;
 
                     break;
 
                 case 'allowUpperCaseUrlSchemes':
-                    $this->allowUpperCaseUrlSchemes = (bool) $value;
+                    if (! is_bool($value)) {
+                        @trigger_error(sprintf(
+                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
+                            $key
+                        ), \E_USER_DEPRECATED);
+
+                        $value = (bool) $value;
+                    }
+
+                    $this->allowUpperCaseUrlSchemes = $value;
 
                     break;
 
