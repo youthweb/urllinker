@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Providing the config option `emailLinkCreator` to `Youthweb\UrlLinker\UrlLinker::__construct()` as `callable` is deprecated, provide as `Closure` instead.
 - Providing the config option `allowFtpAddresses` to `Youthweb\UrlLinker\UrlLinker::__construct()` not as `boolean` is deprecated, provide as `boolean` instead.
 - Providing the config option `allowUpperCaseUrlSchemes` to `Youthweb\UrlLinker\UrlLinker::__construct()` not as `boolean` is deprecated, provide as `boolean` instead.
+- Implementing `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsAndEscapeHtml()` without return type `string` is deprecated, add `string` as return type in your implementation instead.
+- Implementing `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsInTrustedHtml()` without return type `string` is deprecated, add `string` as return type in your implementation instead.
 
 ## [1.4.0](https://github.com/youthweb/urllinker/compare/1.3.0...1.4.0) - 2021-03-05
 
