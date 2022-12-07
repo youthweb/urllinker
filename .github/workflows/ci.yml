@@ -16,7 +16,7 @@ jobs:
       matrix:
         php: ['8.1', '8.2']
 
-    name: "Static code check with PHPStan on PHP ${{ matrix.php }}"
+    name: "PHPStan on PHP ${{ matrix.php }}"
     continue-on-error: ${{ matrix.php == '8.2' }}
 
     steps:
@@ -54,7 +54,7 @@ jobs:
       matrix:
         php: ['7.4', '8.0', '8.1', '8.2']
 
-    name: "Run PHPUnit with PHP ${{ matrix.php }}"
+    name: "PHPUnit on PHP ${{ matrix.php }}"
     continue-on-error: ${{ matrix.php == '8.2' }}
 
     steps:
