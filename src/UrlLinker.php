@@ -21,76 +21,132 @@ namespace Youthweb\UrlLinker;
 
 use Closure;
 use InvalidArgumentException;
+use UnexpectedValueException;
 
 final class UrlLinker implements UrlLinkerInterface
 {
     /**
-     * @var bool
+     * Ftp addresses like "ftp://example.com" will be allowed, default false
      */
-    private $allowFtpAddresses;
+    private bool $allowFtpAddresses = false;
 
     /**
-     * @var bool
+     * Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
      */
-    private $allowUpperCaseUrlSchemes;
+    private bool $allowUpperCaseUrlSchemes = false;
 
     /**
-     * @var Closure
+     * Closure to modify the way the urls will be linked
      */
-    private $htmlLinkCreator;
+    private Closure $htmlLinkCreator;
 
     /**
-     * @var Closure
+     * Closure to modify the way the emails will be linked
      */
-    private $emailLinkCreator;
+    private Closure $emailLinkCreator;
 
     /**
-     * @var array
+     * @var array<string,bool>
      */
-    private $validTlds;
+    private array $validTlds;
 
     /**
      * Set the configuration
      *
      * @since v1.1.0
      *
-     * @param array $options Configuation array
-     *
-     * @return self
+     * @param array<string,mixed> $options Configuation array
      */
     public function __construct(array $options = [])
     {
-        $default_options = [
-            'allowFtpAddresses' => false,
-            'allowUpperCaseUrlSchemes' => false,
-            'htmlLinkCreator' => function ($url, $content) {
-                return $this->createHtmlLink($url, $content);
-            },
-            'emailLinkCreator' => function ($url, $content) {
-                return $this->createEmailLink($url, $content);
-            },
-            'validTlds' => DomainStorage::getValidTlds(),
+        $allowedOptions = [
+            'allowFtpAddresses',
+            'allowUpperCaseUrlSchemes',
+            'htmlLinkCreator',
+            'emailLinkCreator',
+            'validTlds',
         ];
 
-        foreach ($default_options as $key => $value) {
-            if (array_key_exists($key, $options)) {
-                $value = $options[$key];
-            }
-
+        foreach ($allowedOptions as $key) {
             switch ($key) {
                 case 'allowFtpAddresses':
-                    $this->allowFtpAddresses = (bool) $value;
+                    if (array_key_exists($key, $options)) {
+                        $value = $options[$key];
+                    } else {
+                        $value = false;
+                    }
+
+                    if (! is_bool($value)) {
+                        @trigger_error(sprintf(
+                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
+                            $key
+                        ), \E_USER_DEPRECATED);
+
+                        $value = (bool) $value;
+                    }
+
+                    $this->allowFtpAddresses = $value;
 
                     break;
 
                 case 'allowUpperCaseUrlSchemes':
-                    $this->allowUpperCaseUrlSchemes = (bool) $value;
+                    if (array_key_exists($key, $options)) {
+                        $value = $options[$key];
+                    } else {
+                        $value = false;
+                    }
+
+                    if (! is_bool($value)) {
+                        @trigger_error(sprintf(
+                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
+                            $key
+                        ), \E_USER_DEPRECATED);
+
+                        $value = (bool) $value;
+                    }
+
+                    $this->allowUpperCaseUrlSchemes = $value;
 
                     break;
 
                 case 'htmlLinkCreator':
-                    if (! is_callable($value)) {
-                        throw new InvalidArgumentException('The value of the htmlLinkCreator option must be callable.');
+                    if (array_key_exists($key, $options)) {
+                        $value = $options[$key];
+                    } else {
+                        $value = function ($url, $content) {
+                            return $this->createHtmlLink($url, $content);
+                        };
+                    }
+
+                    if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
+                        @trigger_error(sprintf(
+                            'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
+                            $key,
+                            Closure::class
+                        ), \E_USER_DEPRECATED);
+
+                        $value = function(string $url, string $content) use ($value): string {
+                            $return = call_user_func($value, $url, $content);
+
+                            if (! is_string($return)) {
+                                throw new UnexpectedValueException(sprintf(
+                                    'Return value of callable for "%s" must return value of type "string", "%s" given.',
+                                    'htmlLinkCreator',
+                                    function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                                ));
+                            }
+
+                            return $return;
+                        };
+                    }
+
+                    if (! is_object($value) or ! $value instanceof Closure) {
+                        throw new InvalidArgumentException(sprintf(
+                            'Option "%s" must be of type "%s", "%s" given.',
+                            $key,
+                            Closure::class,
+                            function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                        ));
                     }
 
                     $this->htmlLinkCreator = $value;
@@ -98,8 +154,43 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'emailLinkCreator':
-                    if (! is_callable($value)) {
-                        throw new InvalidArgumentException('The value of the emailLinkCreator option must be callable.');
+                    if (array_key_exists($key, $options)) {
+                        $value = $options[$key];
+                    } else {
+                        $value = function ($url, $content) {
+                            return $this->createEmailLink($url, $content);
+                        };
+                    }
+
+                    if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
+                        @trigger_error(sprintf(
+                            'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
+                            $key,
+                            Closure::class
+                        ), \E_USER_DEPRECATED);
+
+                        $value = function(string $url, string $content) use ($value): string {
+                            $return = call_user_func($value, $url, $content);
+
+                            if (! is_string($return)) {
+                                throw new UnexpectedValueException(sprintf(
+                                    'Return value of callable for "%s" must return value of type "string", "%s" given.',
+                                    'htmlLinkCreator',
+                                    function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                                ));
+                            }
+
+                            return $return;
+                        };
+                    }
+
+                    if (! is_object($value) or ! $value instanceof Closure) {
+                        throw new InvalidArgumentException(sprintf(
+                            'Option "%s" must be of type "%s", "%s" given.',
+                            $key,
+                            Closure::class,
+                            function_exists('get_debug_type') ? get_debug_type($value): (is_object($value) ? get_class($value) : gettype($value))
+                        ));
                     }
 
                     $this->emailLinkCreator = $value;
@@ -107,7 +198,13 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'validTlds':
-                    $this->validTlds = (array) $value;
+                    if (array_key_exists($key, $options)) {
+                        $value = (array) $options[$key];
+                    } else {
+                        $value = DomainStorage::getValidTlds();
+                    }
+
+                    $this->validTlds = $value;
 
                     break;
             }
@@ -116,14 +213,14 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param bool $allowFtpAddresses
-     *
-     * @return self
      */
-    public function setAllowFtpAddresses($allowFtpAddresses)
+    public function setAllowFtpAddresses(bool $allowFtpAddresses): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->allowFtpAddresses = (bool) $allowFtpAddresses;
 
@@ -132,26 +229,27 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return bool
      */
-    public function getAllowFtpAddresses()
+    public function getAllowFtpAddresses(): bool
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->allowFtpAddresses;
     }
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param bool $allowUpperCaseUrlSchemes
-     *
-     * @return self
      */
-    public function setAllowUpperCaseUrlSchemes($allowUpperCaseUrlSchemes)
+    public function setAllowUpperCaseUrlSchemes(bool $allowUpperCaseUrlSchemes): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->allowUpperCaseUrlSchemes = (bool) $allowUpperCaseUrlSchemes;
 
@@ -160,26 +258,27 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return bool
      */
-    public function getAllowUpperCaseUrlSchemes()
+    public function getAllowUpperCaseUrlSchemes(): bool
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->allowUpperCaseUrlSchemes;
     }
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param Closure $creator
-     *
-     * @return self
      */
-    public function setHtmlLinkCreator(Closure $creator)
+    public function setHtmlLinkCreator(Closure $creator): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->htmlLinkCreator = $creator;
 
@@ -188,26 +287,27 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return Closure
      */
-    public function getHtmlLinkCreator()
+    public function getHtmlLinkCreator(): Closure
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->htmlLinkCreator;
     }
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param Closure $creator
-     *
-     * @return self
      */
-    public function setEmailLinkCreator(Closure $creator)
+    public function setEmailLinkCreator(Closure $creator): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->emailLinkCreator = $creator;
 
@@ -216,12 +316,13 @@ final class UrlLinker implements UrlLinkerInterface
 
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return Closure
      */
-    public function getEmailLinkCreator()
+    public function getEmailLinkCreator(): Closure
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->emailLinkCreator;
     }
@@ -229,13 +330,15 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
      *
-     * @param array $validTlds
-     *
-     * @return self
+     * @param array<string,bool> $validTlds
      */
-    public function setValidTlds(array $validTlds)
+    public function setValidTlds(array $validTlds): self
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0. Use config setting through __construct() instead', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
+            __METHOD__,
+            __CLASS__ . '::__construct()'
+        ), \E_USER_DEPRECATED);
 
         $this->validTlds = $validTlds;
 
@@ -245,11 +348,14 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * @deprecated since version 1.1, to be set to private in 2.0.
      *
-     * @return bool
+     * @return array<string,bool>
      */
-    public function getValidTlds()
+    public function getValidTlds(): array
     {
-        @trigger_error(__METHOD__ . ' is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.', E_USER_DEPRECATED);
+        @trigger_error(sprintf(
+            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
 
         return $this->validTlds;
     }
@@ -259,10 +365,8 @@ final class UrlLinker implements UrlLinkerInterface
      * turning URLs into links.
      *
      * @param string $text
-     *
-     * @return string
      */
-    public function linkUrlsAndEscapeHtml($text)
+    public function linkUrlsAndEscapeHtml(string $text): string
     {
         // We can abort if there is no . in $text
         if (strpos($text, '.') === false) {
@@ -290,11 +394,9 @@ final class UrlLinker implements UrlLinkerInterface
             $path        = $match[7][0];
 
             // Check that the TLD is valid or that $domain is an IP address.
-            $tld = strtolower(strrchr($domain, '.'));
+            $tld = strtolower((string) strrchr($domain, '.'));
 
-            $validTlds = $this->validTlds;
-
-            if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld])) {
+            if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
                 if (! $scheme && $password) {
@@ -344,10 +446,8 @@ final class UrlLinker implements UrlLinkerInterface
      * a malicious user can lead to system compromise through cross-site scripting.
      *
      * @param string $html
-     *
-     * @return string
      */
-    public function linkUrlsInTrustedHtml($html)
+    public function linkUrlsInTrustedHtml(string $html): string
     {
         $reMarkup = '{</?([a-z]+)([^"\'>]|"[^"]*"|\'[^\']*\')*>|&#?[a-zA-Z0-9]+;|$}';
 
@@ -468,6 +568,7 @@ final class UrlLinker implements UrlLinkerInterface
     {
         $flags = ENT_COMPAT | ENT_HTML401;
         $encoding = ini_get('default_charset');
+        $encoding = $encoding !== false ? $encoding : null;
         $double_encode = false; // Do not double encode
 
         return htmlspecialchars($string, $flags, $encoding, $double_encode);

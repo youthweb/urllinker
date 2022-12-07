@@ -28,7 +28,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @test UrlLinker implements UrlLinkerInterface
      */
-    public function testItImplementsUrlLinkerInterface()
+    public function testItImplementsUrlLinkerInterface(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -43,10 +43,10 @@ class UrlLinkerTest extends TestCase
     /**
      * @test UrlLinker throws Exception with wrong htmlLinkCreator
      */
-    public function throwExceptionWithWrongHtmllinkcreator()
+    public function throwExceptionWithWrongHtmllinkcreator(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value of the htmlLinkCreator option must be callable.');
+        $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "string" given.');
 
         $config = [
             'htmlLinkCreator' => 'this must be a Closure',
@@ -58,10 +58,10 @@ class UrlLinkerTest extends TestCase
     /**
      * @test UrlLinker throws Exception with wrong emailLinkCreator
      */
-    public function throwExceptionWithWrongEmaillinkcreator()
+    public function throwExceptionWithWrongEmaillinkcreator(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value of the emailLinkCreator option must be callable.');
+        $this->expectExceptionMessage('Option "emailLinkCreator" must be of type "Closure", "string" given.');
 
         $config = [
             'emailLinkCreator' => 'this must be a Closure',
@@ -73,7 +73,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @test Closures are allowed as htmlLinkCreator
      */
-    public function allowClosureAsHtmllinkcreator()
+    public function allowClosureAsHtmllinkcreator(): void
     {
         $config = [
             'htmlLinkCreator' => function () {
@@ -93,7 +93,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @test Closures are allowed as emailLinkCreator
      */
-    public function allowClosureAsEmaillinkcreator()
+    public function allowClosureAsEmaillinkcreator(): void
     {
         $config = [
             'emailLinkCreator' => function () {
@@ -113,7 +113,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @test Callables are allowed as htmlLinkCreator
      */
-    public function allowCallableAsHtmllinkcreator()
+    public function allowCallableAsHtmllinkcreator(): void
     {
         $config = [
             'htmlLinkCreator' => [$this, '__construct'],
@@ -132,7 +132,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @test Callables are allowed as emailLinkCreator
      */
-    public function allowCallableAsEmaillinkcreator()
+    public function allowCallableAsEmaillinkcreator(): void
     {
         $config = [
             'emailLinkCreator' => [$this, '__construct'],
@@ -151,7 +151,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testAllowFtpAddressesConfig()
+    public function testAllowFtpAddressesConfig(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -165,7 +165,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testAllowUpperCaseUrlSchemesConfig()
+    public function testAllowUpperCaseUrlSchemesConfig(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -179,7 +179,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testValidTldsConfig()
+    public function testValidTldsConfig(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -195,7 +195,7 @@ class UrlLinkerTest extends TestCase
      *
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testGetHtmlLinkCreator()
+    public function testGetHtmlLinkCreator(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -207,7 +207,7 @@ class UrlLinkerTest extends TestCase
      *
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testSetHtmlLinkCreator()
+    public function testSetHtmlLinkCreator(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -227,7 +227,7 @@ class UrlLinkerTest extends TestCase
      *
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testGetEmailLinkCreator()
+    public function testGetEmailLinkCreator(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -239,7 +239,7 @@ class UrlLinkerTest extends TestCase
      *
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testSetEmailLinkCreator()
+    public function testSetEmailLinkCreator(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -257,7 +257,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testAllowingFtpAddresses()
+    public function testAllowingFtpAddresses(): void
     {
         $urlLinker = new UrlLinker();
         $urlLinker->setAllowFtpAddresses(true);
@@ -280,7 +280,7 @@ class UrlLinkerTest extends TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testAllowingUpperCaseSchemes()
+    public function testAllowingUpperCaseSchemes(): void
     {
         $urlLinker = new UrlLinker();
         $urlLinker->setAllowUpperCaseUrlSchemes(true);

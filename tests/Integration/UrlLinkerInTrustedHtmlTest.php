@@ -35,12 +35,8 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithFtpLinksWithoutHtml
-     *
-     * @param string     $text
-     * @param mixed      $expectedLinked
-     * @param null|mixed $message
      */
-    public function testFtpUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
             'allowFtpAddresses' => true,
@@ -51,12 +47,8 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
-     *
-     * @param string     $text
-     * @param mixed      $expectedLinked
-     * @param null|mixed $message
      */
-    public function testUppercaseUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
@@ -70,12 +62,12 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
      *
      * @param string $text
      */
-    public function testTextNotContainingAnyUrlsRemainsTheSame($text)
+    public function testTextNotContainingAnyUrlsRemainsTheSame($text): void
     {
         $this->assertSame($text, $this->urlLinker->linkUrlsInTrustedHtml($text));
     }
 
-    public function testExample()
+    public function testExample(): void
     {
         $html = <<<EOD
 <p>Send me an <a href="bob@example.com">e-mail</a>
@@ -101,7 +93,7 @@ EOD;
      * @param string      $expectedLinked
      * @param string|null $message
      */
-    public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null): void
     {
         $this->assertSame(
             $expectedLinked,
@@ -125,12 +117,8 @@ EOD;
 
     /**
      * @dataProvider provideTextsWithHtml
-     *
-     * @param string      $text
-     * @param string      $expectedLinked
-     * @param string|null $message
      */
-    public function testHtmlInText($text, $expectedLinked, $message = null)
+    public function testHtmlInText(string $text, string $expectedLinked): void
     {
         $this->urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
@@ -141,8 +129,10 @@ EOD;
 
     /**
      * provide html in text
+     *
+     * @return array<int,array<int,string>>
      */
-    public function provideTextsWithHtml()
+    public function provideTextsWithHtml(): array
     {
         return [
             [

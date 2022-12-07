@@ -26,7 +26,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testGetValidTlds()
+    public function testGetValidTlds(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -40,7 +40,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the default HtmlLinkCreator
      */
-    public function testDefaultHtmlLinkCreator()
+    public function testDefaultHtmlLinkCreator(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -53,7 +53,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test a custom HtmlLinkCreator
      */
-    public function testCustomHtmlLinkCreator()
+    public function testCustomHtmlLinkCreator(): void
     {
         // Simple htmlLinkCreator
         $creator = function ($url, $content) {
@@ -73,7 +73,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the default EmailLinkCreator
      */
-    public function testDefaultEmailLinkCreator()
+    public function testDefaultEmailLinkCreator(): void
     {
         $urlLinker = new UrlLinker();
 
@@ -86,7 +86,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test a custom EmailLinkCreator
      */
-    public function testCustomEmailLinkCreator()
+    public function testCustomEmailLinkCreator(): void
     {
         // Simple EmailLinkCreator
         $creator = function ($email, $content) {
@@ -106,7 +106,7 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test disable EmailLinkCreator
      */
-    public function testDisableEmailLinkCreator()
+    public function testDisableEmailLinkCreator(): void
     {
         // This EmailLinkCreator returns simply the email
         $creator = function ($email, $content) {
@@ -127,18 +127,18 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
      * Test html escaping
      *
      * @dataProvider providerEscapingHtml
-     *
-     * @param mixed $text
-     * @param mixed $expected
      */
-    public function testEscapingHtml($text, $expected)
+    public function testEscapingHtml(string $text, string $expected): void
     {
         $urlLinker = new UrlLinker();
 
         $this->assertSame($expected, $urlLinker->linkUrlsAndEscapeHtml($text));
     }
 
-    public function providerEscapingHtml()
+    /**
+     * @return array<int,array<int,string>>
+     */
+    public function providerEscapingHtml(): array
     {
         return [
             [

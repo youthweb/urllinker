@@ -9,12 +9,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Add type declarations for attributes, parameters and return values in nearly all classes
 - Add tests for PHP 8.1 and 8.2
 
 ### Changed
 
 - Update the IANA TLD list
 - Move CI tests from Travis-CI to Github Actions
+
+### Deprecated
+
+- Providing the config option `htmlLinkCreator` to `Youthweb\UrlLinker\UrlLinker::__construct()` as `callable` is deprecated, provide as `Closure` instead.
+- Providing the config option `emailLinkCreator` to `Youthweb\UrlLinker\UrlLinker::__construct()` as `callable` is deprecated, provide as `Closure` instead.
+- Providing the config option `allowFtpAddresses` to `Youthweb\UrlLinker\UrlLinker::__construct()` not as `boolean` is deprecated, provide as `boolean` instead.
+- Providing the config option `allowUpperCaseUrlSchemes` to `Youthweb\UrlLinker\UrlLinker::__construct()` not as `boolean` is deprecated, provide as `boolean` instead.
+- Implementing `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsAndEscapeHtml()` without return type `string` is deprecated, add `string` as return type in your implementation instead.
+- Implementing `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsInTrustedHtml()` without return type `string` is deprecated, add `string` as return type in your implementation instead.
 
 ## [1.4.0](https://github.com/youthweb/urllinker/compare/1.3.0...1.4.0) - 2021-03-05
 
@@ -41,13 +51,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.2.0](https://github.com/youthweb/urllinker/compare/1.1.0...1.2.0) - 2017-08-24
 
-### Added
-
-- config `htmlLinkCreator` in `__construct()` can be a callable
-- config `emailLinkCreator` in `__construct()` can be a callable
-
 ### Changed
 
+- The provided config option `htmlLinkCreator` to `Youthweb\UrlLinker\UrlLinker::__construct()` can be a `callable`.
+- The provided config option `emailLinkCreator` to `Youthweb\UrlLinker\UrlLinker::__construct()` can be a `callable`.
 - Updated the IANA TLD list with ~50 more domains
 - The test files following PSR-4
 

@@ -24,9 +24,9 @@ use PHPUnit\Framework\TestCase;
 abstract class UrlLinkerTestCase extends TestCase
 {
     /**
-     * @return array
+     * @return array<int,array<int,string>>
      */
-    public function provideTextsNotContainingAnyUrls()
+    public function provideTextsNotContainingAnyUrls(): array
     {
         return [
             [''],
@@ -37,9 +37,9 @@ abstract class UrlLinkerTestCase extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<int,array<int,string>>
      */
-    public function provideTextsWithFtpLinksWithoutHtml()
+    public function provideTextsWithFtpLinksWithoutHtml(): array
     {
         return [
             // simple
@@ -51,9 +51,9 @@ abstract class UrlLinkerTestCase extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<int,array<int,string>>
      */
-    public function provideTextsWithUppercaseLinksWithoutHtml()
+    public function provideTextsWithUppercaseLinksWithoutHtml(): array
     {
         return [
             // simple
@@ -65,9 +65,9 @@ abstract class UrlLinkerTestCase extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<int,array<int,string>>
      */
-    public function provideTextsWithLinksWithoutHtml()
+    public function provideTextsWithLinksWithoutHtml(): array
     {
         return [
             // simple
@@ -181,12 +181,9 @@ abstract class UrlLinkerTestCase extends TestCase
     }
 
     /**
-     * @param string $href
-     * @param string $content
-     *
-     * @return string
+     * Create a HTML link from href and content
      */
-    protected function link($href, $content)
+    protected function link(string $href, string $content): string
     {
         return sprintf('<a href="%s">%s</a>', $href, $content);
     }

@@ -35,12 +35,8 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithFtpLinksWithoutHtml
-     *
-     * @param string     $text
-     * @param mixed      $expectedLinked
-     * @param null|mixed $message
      */
-    public function testFtpUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
             'allowFtpAddresses' => true,
@@ -51,12 +47,8 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
-     *
-     * @param string     $text
-     * @param mixed      $expectedLinked
-     * @param null|mixed $message
      */
-    public function testUppercaseUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
@@ -70,12 +62,12 @@ class UrlLinkerEscapingHtmlTest extends UrlLinkerTestCase
      *
      * @param string $text
      */
-    public function testTextNotContainingAnyUrlsRemainsTheSame($text)
+    public function testTextNotContainingAnyUrlsRemainsTheSame(string $text): void
     {
         $this->assertSame($text, $this->urlLinker->linkUrlsAndEscapeHtml($text));
     }
 
-    public function testExample()
+    public function testExample(): void
     {
         $text = <<<EOD
 Here's an e-mail-address:bob+test@example.org. Here's an authenticated URL: http://skroob:12345@example.com.
@@ -129,7 +121,7 @@ EOD;
      * @param string      $expectedLinked
      * @param string|null $message
      */
-    public function testUrlsGetLinkedInText($text, $expectedLinked, $message = null)
+    public function testUrlsGetLinkedInText(string $text, string $expectedLinked, $message = null): void
     {
         $this->assertSame(
             $expectedLinked,
@@ -156,9 +148,8 @@ EOD;
      *
      * @param string      $text
      * @param string      $expectedLinked
-     * @param string|null $message
      */
-    public function testHtmlInText($text, $expectedLinked, $message = null)
+    public function testHtmlInText(string $text, string $expectedLinked): void
     {
         $this->urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
@@ -169,8 +160,10 @@ EOD;
 
     /**
      * provide html in text
+     *
+     * @return array<int,array<int,string>>
      */
-    public function provideTextsWithHtml()
+    public function provideTextsWithHtml(): array
     {
         return [
             [
