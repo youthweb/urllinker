@@ -35,12 +35,8 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithFtpLinksWithoutHtml
-     *
-     * @param string     $text
-     * @param mixed      $expectedLinked
-     * @param null|mixed $message
      */
-    public function testFtpUrlsGetLinkedInText($text, $expectedLinked, $message = null): void
+    public function testFtpUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
             'allowFtpAddresses' => true,
@@ -51,12 +47,8 @@ class UrlLinkerInTrustedHtmlTest extends UrlLinkerTestCase
 
     /**
      * @dataProvider provideTextsWithUppercaseLinksWithoutHtml
-     *
-     * @param string     $text
-     * @param mixed      $expectedLinked
-     * @param null|mixed $message
      */
-    public function testUppercaseUrlsGetLinkedInText($text, $expectedLinked, $message = null): void
+    public function testUppercaseUrlsGetLinkedInText(string $text, string $expectedLinked, ?string $message = null): void
     {
         $this->urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
@@ -125,12 +117,8 @@ EOD;
 
     /**
      * @dataProvider provideTextsWithHtml
-     *
-     * @param string      $text
-     * @param string      $expectedLinked
-     * @param string|null $message
      */
-    public function testHtmlInText($text, $expectedLinked, $message = null): void
+    public function testHtmlInText(string $text, string $expectedLinked): void
     {
         $this->urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,

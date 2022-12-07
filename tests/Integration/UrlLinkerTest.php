@@ -127,11 +127,8 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
      * Test html escaping
      *
      * @dataProvider providerEscapingHtml
-     *
-     * @param mixed $text
-     * @param mixed $expected
      */
-    public function testEscapingHtml($text, $expected): void
+    public function testEscapingHtml(string $text, string $expected): void
     {
         $urlLinker = new UrlLinker();
 
