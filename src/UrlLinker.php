@@ -59,25 +59,23 @@ final class UrlLinker implements UrlLinkerInterface
      */
     public function __construct(array $options = [])
     {
-        $default_options = [
-            'allowFtpAddresses' => false,
-            'allowUpperCaseUrlSchemes' => false,
-            'htmlLinkCreator' => function ($url, $content) {
-                return $this->createHtmlLink($url, $content);
-            },
-            'emailLinkCreator' => function ($url, $content) {
-                return $this->createEmailLink($url, $content);
-            },
-            'validTlds' => DomainStorage::getValidTlds(),
+        $allowedOptions = [
+            'allowFtpAddresses',
+            'allowUpperCaseUrlSchemes',
+            'htmlLinkCreator',
+            'emailLinkCreator',
+            'validTlds',
         ];
 
-        foreach ($default_options as $key => $value) {
-            if (array_key_exists($key, $options)) {
-                $value = $options[$key];
-            }
-
+        foreach ($allowedOptions as $key) {
             switch ($key) {
                 case 'allowFtpAddresses':
+                    if (array_key_exists($key, $options)) {
+                        $value = $options[$key];
+                    } else {
+                        $value = false;
+                    }
+
                     if (! is_bool($value)) {
                         @trigger_error(sprintf(
                             'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
@@ -92,6 +90,12 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'allowUpperCaseUrlSchemes':
+                    if (array_key_exists($key, $options)) {
+                        $value = $options[$key];
+                    } else {
+                        $value = false;
+                    }
+
                     if (! is_bool($value)) {
                         @trigger_error(sprintf(
                             'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
@@ -106,6 +110,14 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'htmlLinkCreator':
+                    if (array_key_exists($key, $options)) {
+                        $value = $options[$key];
+                    } else {
+                        $value = function ($url, $content) {
+                            return $this->createHtmlLink($url, $content);
+                        };
+                    }
+
                     if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
                         @trigger_error(sprintf(
                             'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
@@ -142,6 +154,14 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'emailLinkCreator':
+                    if (array_key_exists($key, $options)) {
+                        $value = $options[$key];
+                    } else {
+                        $value = function ($url, $content) {
+                            return $this->createEmailLink($url, $content);
+                        };
+                    }
+
                     if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
                         @trigger_error(sprintf(
                             'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
@@ -178,7 +198,13 @@ final class UrlLinker implements UrlLinkerInterface
                     break;
 
                 case 'validTlds':
-                    $this->validTlds = (array) $value;
+                    if (array_key_exists($key, $options)) {
+                        $value = (array) $options[$key];
+                    } else {
+                        $value = DomainStorage::getValidTlds();
+                    }
+
+                    $this->validTlds = $value;
 
                     break;
             }
@@ -370,9 +396,7 @@ final class UrlLinker implements UrlLinkerInterface
             // Check that the TLD is valid or that $domain is an IP address.
             $tld = strtolower((string) strrchr($domain, '.'));
 
-            $validTlds = $this->validTlds;
-
-            if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld])) {
+            if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($this->validTlds[$tld])) {
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
                 if (! $scheme && $password) {
