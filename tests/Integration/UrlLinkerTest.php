@@ -34,8 +34,8 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 
         $tlds = $urlLinker->getValidTlds();
 
-        $this->assertTrue(is_array($tlds));
-        $this->assertTrue(array_key_exists('.com', $tlds));
+        $this->assertIsArray($tlds);
+        $this->assertArrayHasKey('.com', $tlds);
         $this->assertTrue($tlds['.com']);
     }
 
