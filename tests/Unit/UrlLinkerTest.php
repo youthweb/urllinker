@@ -223,6 +223,42 @@ class UrlLinkerTest extends TestCase
         $this->assertSame($creator, $urlLinker->getEmailLinkCreator());
     }
 
+    public function testNotAllowingFtpAddresses(): void
+    {
+        $urlLinker = new UrlLinker([
+            'allowFtpAddresses' => false,
+        ]);
+        $urlLinker->setValidTlds(['.com' => true]);
+
+        $text = '<div>ftp://example.com</div>';
+        $expectedText = '&lt;div&gt;ftp://<a href="http://example.com">example.com</a>&lt;/div&gt;';
+
+        $this->assertSame($expectedText, $urlLinker->linkUrlsAndEscapeHtml($text));
+
+        $html = '<div>ftp://example.com</div>';
+        $expectedHtml = '<div>ftp://<a href="http://example.com">example.com</a></div>';
+
+        $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
+    }
+
+    public function testAllowingFtpAddresses(): void
+    {
+        $urlLinker = new UrlLinker([
+            'allowFtpAddresses' => true,
+        ]);
+        $urlLinker->setValidTlds(['.com' => true]);
+
+        $text = '<div>ftp://example.com</div>';
+        $expectedText = '&lt;div&gt;<a href="ftp://example.com">example.com</a>&lt;/div&gt;';
+
+        $this->assertSame($expectedText, $urlLinker->linkUrlsAndEscapeHtml($text));
+
+        $html = '<div>ftp://example.com</div>';
+        $expectedHtml = '<div><a href="ftp://example.com">example.com</a></div>';
+
+        $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
+    }
+
     public function testNotAllowingUpperCaseSchemes(): void
     {
         $urlLinker = new UrlLinker([
