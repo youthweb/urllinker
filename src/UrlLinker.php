@@ -80,7 +80,7 @@ final class UrlLinker implements UrlLinkerInterface
 
                     if (! is_bool($value)) {
                         @trigger_error(sprintf(
-                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
+                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5.0 and will not be casted in version 2.0, provide as "boolean" instead.',
                             $key
                         ), \E_USER_DEPRECATED);
 
@@ -100,7 +100,7 @@ final class UrlLinker implements UrlLinkerInterface
 
                     if (! is_bool($value)) {
                         @trigger_error(sprintf(
-                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
+                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5.0 and will not be casted in version 2.0, provide as "boolean" instead.',
                             $key
                         ), \E_USER_DEPRECATED);
 
@@ -122,24 +122,12 @@ final class UrlLinker implements UrlLinkerInterface
 
                     if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
                         @trigger_error(sprintf(
-                            'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
+                            'Providing option "%s" as type "callable" is deprecated since version 1.5.0, provide "%s" instead.',
                             $key,
                             Closure::class
                         ), \E_USER_DEPRECATED);
 
-                        $value = function (string $url, string $content) use ($value): string {
-                            $return = call_user_func($value, $url, $content);
-
-                            if (! is_string($return)) {
-                                throw new UnexpectedValueException(sprintf(
-                                    'Return value of callable for "%s" must return value of type "string", "%s" given.',
-                                    'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                                ));
-                            }
-
-                            return $return;
-                        };
+                        $value = Closure::fromCallable($value);
                     }
 
                     if (! is_object($value) or ! $value instanceof Closure) {
@@ -166,24 +154,12 @@ final class UrlLinker implements UrlLinkerInterface
 
                     if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
                         @trigger_error(sprintf(
-                            'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
+                            'Providing option "%s" as type "callable" is deprecated since version 1.5.0, provide "%s" instead.',
                             $key,
                             Closure::class
                         ), \E_USER_DEPRECATED);
 
-                        $value = function (string $url, string $content) use ($value): string {
-                            $return = call_user_func($value, $url, $content);
-
-                            if (! is_string($return)) {
-                                throw new UnexpectedValueException(sprintf(
-                                    'Return value of callable for "%s" must return value of type "string", "%s" given.',
-                                    'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                                ));
-                            }
-
-                            return $return;
-                        };
+                        $value = Closure::fromCallable($value);
                     }
 
                     if (! is_object($value) or ! $value instanceof Closure) {
@@ -412,19 +388,39 @@ final class UrlLinker implements UrlLinkerInterface
 
                 if (! $scheme && $username && ! $password && ! $afterDomain) {
                     // Looks like an email address.
-                    $emailLinkCreator = $this->emailLinkCreator;
+                    $emailLink = $this->emailLinkCreator->__invoke($url, $url);
+
+                    if (! is_string($emailLink)) {
+                        @trigger_error(sprintf(
+                            'Return value of Closure for "%s" returns type "%s" and will be casted to "string". This is deprecated since version 1.5.1 and will throw an "UnexpectedValueException" in version 2.0, return "string" instead.',
+                            'emailLinkCreator',
+                            gettype($emailLink)
+                        ), \E_USER_DEPRECATED);
+
+                        $emailLink = (string) $emailLink;
+                    }
 
                     // Add the hyperlink.
-                    $html .= $emailLinkCreator($url, $url);
+                    $html .= $emailLink;
                 } else {
                     // Prepend http:// if no scheme is specified
                     $completeUrl = $scheme ? $url : "http://$url";
                     $linkText = "$domain$port$path";
 
-                    $htmlLinkCreator = $this->htmlLinkCreator;
+                    $htmlLink = $this->htmlLinkCreator->__invoke($completeUrl, $linkText);
+
+                    if (! is_string($htmlLink)) {
+                        @trigger_error(sprintf(
+                            'Return value of Closure for "%s" returns type "%s" and will be casted to "string". This is deprecated since version 1.5.1 and will throw an "UnexpectedValueException" in version 2.0, return "string" instead.',
+                            'htmlLinkCreator',
+                            gettype($htmlLink)
+                        ), \E_USER_DEPRECATED);
+
+                        $htmlLink = (string) $htmlLink;
+                    }
 
                     // Add the hyperlink.
-                    $html .= $htmlLinkCreator($completeUrl, $linkText);
+                    $html .= $htmlLink;
                 }
             } else {
                 // Not a valid URL.

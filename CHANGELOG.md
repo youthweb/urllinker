@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/youthweb/urllinker/compare/1.5.0...main)
+## [Unreleased](https://github.com/youthweb/urllinker/compare/1.5.0...stable1.5)
+
+### Deprecated
+
+- Providing a `htmlLinkCreator` Closure, that does not return a `string` is deprecated, let your `Closure` always return a `string` instead.
+- Providing a `emailLinkCreator` Closure, that does not return a `string` is deprecated, let your `Closure` always return a `string` instead.
 
 ## [1.5.0](https://github.com/youthweb/urllinker/compare/1.4.0...1.5.0) - 2022-12-07
 

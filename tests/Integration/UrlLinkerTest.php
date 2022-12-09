@@ -95,7 +95,6 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
         return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
     }
 
-
     /**
      * Test the default EmailLinkCreator
      */
