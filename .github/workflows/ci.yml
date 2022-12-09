@@ -53,6 +53,12 @@ jobs:
       fail-fast: false
       matrix:
         php: ['7.4', '8.0', '8.1', '8.2', '8.3']
+        coverage: [false]
+
+        include:
+          ## Run code coverage on highest supported PHP version.
+          - php: '8.2'
+            coverage: true
 
     name: "PHPUnit on PHP ${{ matrix.php }}"
     continue-on-error: ${{ matrix.php == '8.3' }}
@@ -66,7 +72,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           ini-values: error_reporting=-1, display_errors=On, log_errors_max_len=0
-          coverage: none
+          coverage: ${{ matrix.coverage && 'xdebug' || 'none' }}
           tools: none
 
       # Install dependencies and handle caching in one go.
@@ -81,5 +87,18 @@ jobs:
         with:
           composer-options: --ignore-platform-reqs
 
-      - name: Run unit tests
+      - name: Run unit tests without code coverage
+        if: ${{ matrix.coverage == false }}
         run: vendor/bin/phpunit
+
+      - name: Run unit tests with code coverage
+        if: ${{ matrix.coverage == true }}
+        run: vendor/bin/phpunit --coverage-clover clover.xml
+
+      - name: Send coverage report to Codecov
+        if: ${{ success() && matrix.coverage == true }}
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./clover.xml
+          fail_ci_if_error: true
+          verbose: true
