@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/youthweb/urllinker/compare/1.5.0...stable1.5)
+## [Unreleased](https://github.com/youthweb/urllinker/compare/1.5.1...stable1.5)
+
+## [1.5.1](https://github.com/youthweb/urllinker/compare/1.5.0...1.5.1) - 2022-12-09
+
+### Added
+
+- Add tests for PHP 8.3
+- Add Codecov for better code coverage
 
 ### Deprecated
 
