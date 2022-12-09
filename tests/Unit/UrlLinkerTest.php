@@ -21,8 +21,11 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Unit;
 
+use ArrayIterator;
+use EmptyIterator;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerTest extends TestCase
@@ -30,119 +33,60 @@ class UrlLinkerTest extends TestCase
     /**
      * @test UrlLinker implements UrlLinkerInterface
      */
-    public function testItImplementsUrlLinkerInterface(): void
+    public function testUrlLinkerImplementsUrlLinkerInterface(): void
     {
         $urlLinker = new UrlLinker();
 
         $this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', $urlLinker);
     }
 
-    /**
-     * @test UrlLinker throws Exception with wrong htmlLinkCreator
-     */
-    public function throwExceptionWithWrongHtmllinkcreator(): void
+    public function testProvidingClosureAsHtmlLinkCreator(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "string" given.');
+        new UrlLinker([
+            'htmlLinkCreator' => function (): void {},
+        ]);
 
-        $config = [
-            'htmlLinkCreator' => 'this must be a Closure',
-        ];
-
-        $urlLinker = new UrlLinker($config);
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(true);
     }
 
     /**
-     * @test UrlLinker throws Exception with wrong emailLinkCreator
+     * @dataProvider wrongCreatorProvider
      */
-    public function throwExceptionWithWrongEmaillinkcreator(): void
+    public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "emailLinkCreator" must be of type "Closure", "string" given.');
+        $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "');
 
-        $config = [
+        new UrlLinker([
+            'htmlLinkCreator' => $wrongCreator,
+        ]);
+
+    }
+
+    public function testProvidingClosureAsEmailLinkCreator(): void
+    {
+        new UrlLinker([
+            'emailLinkCreator' => function (): void {},
+        ]);
+
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @dataProvider wrongCreatorProvider
+     */
+    public function testWrongEmailLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "emailLinkCreator" must be of type "Closure", "');
+
+        new UrlLinker([
             'emailLinkCreator' => 'this must be a Closure',
-        ];
-
-        $urlLinker = new UrlLinker($config);
-    }
-
-    /**
-     * @test Closures are allowed as htmlLinkCreator
-     */
-    public function allowClosureAsHtmllinkcreator(): void
-    {
-        $config = [
-            'htmlLinkCreator' => function (): void {
-            },
-        ];
-
-        $urlLinker = new UrlLinker($config);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
-        );
-    }
-
-    /**
-     * @test Closures are allowed as emailLinkCreator
-     */
-    public function allowClosureAsEmaillinkcreator(): void
-    {
-        $config = [
-            'emailLinkCreator' => function (): void {
-            },
-        ];
-
-        $urlLinker = new UrlLinker($config);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
-        );
-    }
-
-    /**
-     * @test Callables are allowed as htmlLinkCreator
-     */
-    public function allowCallableAsHtmllinkcreator(): void
-    {
-        $config = [
-            'htmlLinkCreator' => [$this, '__construct'],
-        ];
-
-        $urlLinker = new UrlLinker($config);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
-        );
-    }
-
-    /**
-     * @test Callables are allowed as emailLinkCreator
-     */
-    public function allowCallableAsEmaillinkcreator(): void
-    {
-        $config = [
-            'emailLinkCreator' => [$this, '__construct'],
-        ];
-
-        $urlLinker = new UrlLinker($config);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
-        );
+        ]);
     }
 
     public function testSettingValidTldsConfig(): void
@@ -268,4 +212,103 @@ class UrlLinkerTest extends TestCase
 
         $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
     }
+
+    /**
+     * @return array<string,mixed>
+     */
+    public function wrongCreatorProvider(): array
+    {
+        return $this->getAllExcept(['closure']);
+    }
+
+    /**
+	 * Retrieve an array in data provider format with a selection of all typical PHP data types
+	 * *except* the named types specified in the $except parameter.
+     *
+     * @see https://github.com/WordPress/Requests/pull/710
+	 *
+	 * @param string[] ...$except One or more arrays containing the names of the types to exclude.
+	 *
+	 * @return array<string,mixed>
+	 */
+	private function getAllExcept(array ...$except) {
+		$except = array_flip(array_merge(...$except));
+
+		return array_diff_key($this->getAll(), $except);
+	}
+
+    /**
+	 * Retrieve an array in data provider format with all typical PHP data types.
+     *
+     * @see https://github.com/WordPress/Requests/pull/710
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function getAll() {
+		return [
+			'null' => [
+				'input' => null,
+			],
+			'boolean false' => [
+				'input' => false,
+			],
+			'boolean true' => [
+				'input' => true,
+			],
+			'integer 0' => [
+				'input' => 0,
+			],
+			'negative integer' => [
+				'input' => -123,
+			],
+			'positive integer' => [
+				'input' => 786687,
+			],
+			'float 0.0' => [
+				'input' => 0.0,
+			],
+			'negative float' => [
+				'input' => 5.600e-3,
+			],
+			'positive float' => [
+				'input' => 124.7,
+			],
+			'empty string' => [
+				'input' => '',
+			],
+			'numeric string' => [
+				'input' => '123',
+			],
+			'textual string' => [
+				'input' => 'foobar',
+			],
+			'textual string starting with numbers' => [
+				'input' => '123 My Street',
+			],
+			'empty array' => [
+				'input' => [],
+			],
+			'array with values, no keys' => [
+				'input' => [1, 2, 3],
+			],
+			'array with values, string keys' => [
+				'input' => ['a' => 1, 'b' => 2],
+			],
+			'callable as array with instanciated object' => [
+				'input' => [$this, '__construct'],
+			],
+			'closure' => [
+				'input' => function() { return true; },
+			],
+			'plain object' => [
+				'input' => new stdClass(),
+			],
+			'ArrayIterator object' => [
+				'input' => new ArrayIterator([1, 2, 3]),
+			],
+			'Iterator object, no array access' => [
+				'input' => new EmptyIterator(),
+			],
+		];
+	}
 }

@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
+use UnexpectedValueException;
 use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerTest extends \PHPUnit\Framework\TestCase
@@ -59,28 +60,22 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test a custom HtmlLinkCreator as deprecated callable
+     * @test UnexpectedValueException is thrown if custom htmlLinkCreator does not return string
      */
-    public function testCustomHtmlLinkCreatorAsCallable(): void
+    public function testThrowingUnexpectedValueExceptionIfCustomHtmlLinkCreatorDoesNotReturnString(): void
     {
         $urlLinker = new UrlLinker([
-            'htmlLinkCreator' => [$this, 'customHtmlLinkCreatorCallable'],
+            // wrong htmlLinkCreator
+            'htmlLinkCreator' => function ($url, $content) {
+                return null;
+            },
         ]);
 
-        $text = 'example.com';
-        $expected = '<a href="http://example.com" target="_blank">example.com</a>';
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Return value of Closure for "htmlLinkCreator" must return value of type "string", "NULL" given.');
 
-        $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
+        $urlLinker->linkUrlsInTrustedHtml('example.com');
     }
-
-    /**
-     * Simple htmlLinkCreator used as callable for tests
-     */
-    public function customHtmlLinkCreatorCallable(string $url, string $content): string
-    {
-        return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
-    }
-
 
     /**
      * Test the default EmailLinkCreator
@@ -136,25 +131,21 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test a custom EmailLinkCreator provided as callable
+     * @test UnexpectedValueException is thrown if custom emailLinkCreator does not return string
      */
-    public function testCustomEmailLinkCreatorAsCallable(): void
+    public function testThrowingUnexpectedValueExceptionIfCustomEmailLinkCreatorDoesNotReturnString(): void
     {
         $urlLinker = new UrlLinker([
-            'emailLinkCreator' => [$this, 'customEmailLinkCreatorCallable'],
+            // wrong emailLinkCreator
+            'emailLinkCreator' => function ($email, $content) {
+                return null;
+            },
         ]);
 
-        $text = 'mail@example.com';
-        $expected = '<a href="mail@example.com" class="email">mail@example.com</a>';
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Return value of Closure for "emailLinkCreator" must return value of type "string", "NULL" given.');
 
-        $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
-    }
-
-    /**
-     * Simple emailLinkCreator used as callable for tests
-     */
-    public function customEmailLinkCreatorCallable(string $email, string $content): string {
-        return '<a href="' . $email . '" class="email">' . $content . '</a>';
+        $urlLinker->linkUrlsInTrustedHtml('user@example.com');
     }
 
     /**

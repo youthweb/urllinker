@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
+- **BREAKING** The deprecated support for `callable` in the config option `htmlLinkCreator` was removed, use `Closure` instead
+- **BREAKING** The deprecated support for `callable` in the config option `emailLinkCreator` was removed, use `Closure` instead
 - **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getAllowFtpAddresses()` was removed
 - **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setAllowFtpAddresses()` was removed
 - **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getAllowUpperCaseUrlSchemes()` was removed

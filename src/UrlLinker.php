@@ -120,28 +120,6 @@ final class UrlLinker implements UrlLinkerInterface
                         };
                     }
 
-                    if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
-                        @trigger_error(sprintf(
-                            'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
-                            $key,
-                            Closure::class
-                        ), \E_USER_DEPRECATED);
-
-                        $value = function (string $url, string $content) use ($value): string {
-                            $return = call_user_func($value, $url, $content);
-
-                            if (! is_string($return)) {
-                                throw new UnexpectedValueException(sprintf(
-                                    'Return value of callable for "%s" must return value of type "string", "%s" given.',
-                                    'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                                ));
-                            }
-
-                            return $return;
-                        };
-                    }
-
                     if (! is_object($value) or ! $value instanceof Closure) {
                         throw new InvalidArgumentException(sprintf(
                             'Option "%s" must be of type "%s", "%s" given.',
@@ -161,28 +139,6 @@ final class UrlLinker implements UrlLinkerInterface
                     } else {
                         $value = function ($url, $content) {
                             return $this->createEmailLink($url, $content);
-                        };
-                    }
-
-                    if (is_callable($value) and (! is_object($value) or ! $value instanceof Closure)) {
-                        @trigger_error(sprintf(
-                            'Providing option "%s" as type "callable" is deprecated since version 1.5, provide "%s" instead.',
-                            $key,
-                            Closure::class
-                        ), \E_USER_DEPRECATED);
-
-                        $value = function (string $url, string $content) use ($value): string {
-                            $return = call_user_func($value, $url, $content);
-
-                            if (! is_string($return)) {
-                                throw new UnexpectedValueException(sprintf(
-                                    'Return value of callable for "%s" must return value of type "string", "%s" given.',
-                                    'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                                ));
-                            }
-
-                            return $return;
                         };
                     }
 
@@ -263,19 +219,34 @@ final class UrlLinker implements UrlLinkerInterface
 
                 if (! $scheme && $username && ! $password && ! $afterDomain) {
                     // Looks like an email address.
-                    $emailLinkCreator = $this->emailLinkCreator;
+                    $emailLink = $this->emailLinkCreator->__invoke($url, $url);
+
+                    if (! is_string($emailLink)) {
+                        throw new UnexpectedValueException(sprintf(
+                            'Return value of Closure for "%s" must return value of type "string", "%s" given.',
+                            'emailLinkCreator',
+                            gettype($emailLink)
+                        ));
+                    }
 
                     // Add the hyperlink.
-                    $html .= $emailLinkCreator($url, $url);
+                    $html .= $emailLink;
                 } else {
                     // Prepend http:// if no scheme is specified
                     $completeUrl = $scheme ? $url : "http://$url";
                     $linkText = "$domain$port$path";
 
-                    $htmlLinkCreator = $this->htmlLinkCreator;
+                    $htmlLink = $this->htmlLinkCreator->__invoke($completeUrl, $linkText);
 
-                    // Add the hyperlink.
-                    $html .= $htmlLinkCreator($completeUrl, $linkText);
+                    if (! is_string($htmlLink)) {
+                        throw new UnexpectedValueException(sprintf(
+                            'Return value of Closure for "%s" must return value of type "string", "%s" given.',
+                            'htmlLinkCreator',
+                            gettype($htmlLink)
+                        ));
+                    }
+
+                    $html .= $htmlLink;
                 }
             } else {
                 // Not a valid URL.
