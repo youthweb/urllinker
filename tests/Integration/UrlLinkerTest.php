@@ -26,20 +26,6 @@ use Youthweb\UrlLinker\UrlLinker;
 class UrlLinkerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testGetValidTlds(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $tlds = $urlLinker->getValidTlds();
-
-        $this->assertIsArray($tlds);
-        $this->assertArrayHasKey('.com', $tlds);
-        $this->assertTrue($tlds['.com']);
-    }
-
-    /**
      * Test the default HtmlLinkCreator
      */
     public function testDefaultHtmlLinkCreator(): void

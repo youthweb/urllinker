@@ -145,18 +145,18 @@ class UrlLinkerTest extends TestCase
         );
     }
 
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testValidTldsConfig(): void
+    public function testSettingValidTldsConfig(): void
     {
-        $urlLinker = new UrlLinker();
+        new UrlLinker([
+            'validTlds' => ['.com' => true, '.org' => true],
+        ]);
 
-        $domains = ['.com' => true, '.org' => true];
-
-        $urlLinker->setValidTlds($domains);
-
-        $this->assertSame($domains, $urlLinker->getValidTlds());
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(
+            true,
+            'Return type ensures this assertion is never reached on failure'
+        );
     }
 
     /**
@@ -201,8 +201,8 @@ class UrlLinkerTest extends TestCase
     {
         $urlLinker = new UrlLinker([
             'allowFtpAddresses' => false,
+            'validTlds' => ['.com' => true],
         ]);
-        $urlLinker->setValidTlds(['.com' => true]);
 
         $text = '<div>ftp://example.com</div>';
         $expectedText = '&lt;div&gt;ftp://<a href="http://example.com">example.com</a>&lt;/div&gt;';
@@ -219,8 +219,8 @@ class UrlLinkerTest extends TestCase
     {
         $urlLinker = new UrlLinker([
             'allowFtpAddresses' => true,
+            'validTlds' => ['.com' => true],
         ]);
-        $urlLinker->setValidTlds(['.com' => true]);
 
         $text = '<div>ftp://example.com</div>';
         $expectedText = '&lt;div&gt;<a href="ftp://example.com">example.com</a>&lt;/div&gt;';
@@ -237,8 +237,8 @@ class UrlLinkerTest extends TestCase
     {
         $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => false,
+            'validTlds' => ['.com' => true],
         ]);
-        $urlLinker->setValidTlds(['.com' => true]);
 
         $text = '<div>HTTP://example.com</div>';
         $expectedText = '&lt;div&gt;HTTP://<a href="http://example.com">example.com</a>&lt;/div&gt;';
@@ -255,8 +255,8 @@ class UrlLinkerTest extends TestCase
     {
         $urlLinker = new UrlLinker([
             'allowUpperCaseUrlSchemes' => true,
+            'validTlds' => ['.com' => true],
         ]);
-        $urlLinker->setValidTlds(['.com' => true]);
 
         $text = '<div>HTTP://example.com</div>';
         $expectedText = '&lt;div&gt;<a href="HTTP://example.com">example.com</a>&lt;/div&gt;';

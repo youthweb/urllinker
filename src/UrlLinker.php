@@ -214,39 +214,6 @@ final class UrlLinker implements UrlLinkerInterface
     }
 
     /**
-     * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     *
-     * @param array<string,bool> $validTlds
-     */
-    public function setValidTlds(array $validTlds): self
-    {
-        @trigger_error(sprintf(
-            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
-            __METHOD__,
-            __CLASS__ . '::__construct()'
-        ), \E_USER_DEPRECATED);
-
-        $this->validTlds = $validTlds;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated since version 1.1, to be set to private in 2.0.
-     *
-     * @return array<string,bool>
-     */
-    public function getValidTlds(): array
-    {
-        @trigger_error(sprintf(
-            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
-            __METHOD__
-        ), \E_USER_DEPRECATED);
-
-        return $this->validTlds;
-    }
-
-    /**
      * Transforms plain text into valid HTML, escaping special characters and
      * turning URLs into links.
      *
