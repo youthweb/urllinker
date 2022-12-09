@@ -73,6 +73,30 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test a custom HtmlLinkCreator as deprecated callable
+     */
+    public function testCustomHtmlLinkCreatorAsCallable(): void
+    {
+        $urlLinker = new UrlLinker([
+            'htmlLinkCreator' => [$this, 'customHtmlLinkCreatorCallable'],
+        ]);
+
+        $text = 'example.com';
+        $expected = '<a href="http://example.com" target="_blank">example.com</a>';
+
+        $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
+    }
+
+    /**
+     * Simple htmlLinkCreator used as callable for tests
+     */
+    public function customHtmlLinkCreatorCallable(string $url, string $content): string
+    {
+        return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
+    }
+
+
+    /**
      * Test the default EmailLinkCreator
      */
     public function testDefaultEmailLinkCreator(): void
@@ -123,6 +147,28 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
         $expected = 'mail@example.com';
 
         $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
+    }
+
+    /**
+     * Test a custom EmailLinkCreator provided as callable
+     */
+    public function testCustomEmailLinkCreatorAsCallable(): void
+    {
+        $urlLinker = new UrlLinker([
+            'emailLinkCreator' => [$this, 'customEmailLinkCreatorCallable'],
+        ]);
+
+        $text = 'mail@example.com';
+        $expected = '<a href="mail@example.com" class="email">mail@example.com</a>';
+
+        $this->assertSame($expected, $urlLinker->linkUrlsInTrustedHtml($text));
+    }
+
+    /**
+     * Simple emailLinkCreator used as callable for tests
+     */
+    public function customEmailLinkCreatorCallable(string $email, string $content): string {
+        return '<a href="' . $email . '" class="email">' . $content . '</a>';
     }
 
     /**
