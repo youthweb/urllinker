@@ -14,14 +14,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.1', '8.2']
+        php: ['8.2', '8.3']
 
     name: "PHPStan on PHP ${{ matrix.php }}"
-    continue-on-error: ${{ matrix.php == '8.2' }}
+    continue-on-error: ${{ matrix.php == '8.3' }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install PHP with latest composer
         uses: shivammathur/setup-php@v2
@@ -33,12 +33,12 @@ jobs:
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
-      - name: "Install Composer dependencies (PHP < 8.2)"
-        if: ${{ matrix.php < '8.2' }}
+      - name: "Install Composer dependencies (PHP < 8.3)"
+        if: ${{ matrix.php < '8.3' }}
         uses: "ramsey/composer-install@v2"
 
-      - name: "Install Composer dependencies (PHP 8.2)"
-        if: ${{ matrix.php >= '8.2' }}
+      - name: "Install Composer dependencies (PHP 8.3)"
+        if: ${{ matrix.php >= '8.3' }}
         uses: "ramsey/composer-install@v2"
         with:
           composer-options: --ignore-platform-reqs
@@ -52,14 +52,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2']
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
 
     name: "PHPUnit on PHP ${{ matrix.php }}"
-    continue-on-error: ${{ matrix.php == '8.2' }}
+    continue-on-error: ${{ matrix.php == '8.3' }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install PHP with latest composer
         uses: shivammathur/setup-php@v2
@@ -71,12 +71,12 @@ jobs:
 
       # Install dependencies and handle caching in one go.
       # @link https://github.com/marketplace/actions/install-composer-dependencies
-      - name: "Install Composer dependencies (PHP < 8.2)"
-        if: ${{ matrix.php < '8.2' }}
+      - name: "Install Composer dependencies (PHP < 8.3)"
+        if: ${{ matrix.php < '8.3' }}
         uses: "ramsey/composer-install@v2"
 
-      - name: "Install Composer dependencies (PHP 8.2)"
-        if: ${{ matrix.php >= '8.2' }}
+      - name: "Install Composer dependencies (PHP 8.3)"
+        if: ${{ matrix.php >= '8.3' }}
         uses: "ramsey/composer-install@v2"
         with:
           composer-options: --ignore-platform-reqs
