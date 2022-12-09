@@ -127,19 +127,7 @@ final class UrlLinker implements UrlLinkerInterface
                             Closure::class
                         ), \E_USER_DEPRECATED);
 
-                        $value = function (string $url, string $content) use ($value): string {
-                            $return = call_user_func($value, $url, $content);
-
-                            if (! is_string($return)) {
-                                throw new UnexpectedValueException(sprintf(
-                                    'Return value of callable for "%s" must return value of type "string", "%s" given.',
-                                    'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                                ));
-                            }
-
-                            return $return;
-                        };
+                        $value = Closure::fromCallable($value);
                     }
 
                     if (! is_object($value) or ! $value instanceof Closure) {
@@ -171,19 +159,7 @@ final class UrlLinker implements UrlLinkerInterface
                             Closure::class
                         ), \E_USER_DEPRECATED);
 
-                        $value = function (string $url, string $content) use ($value): string {
-                            $return = call_user_func($value, $url, $content);
-
-                            if (! is_string($return)) {
-                                throw new UnexpectedValueException(sprintf(
-                                    'Return value of callable for "%s" must return value of type "string", "%s" given.',
-                                    'htmlLinkCreator',
-                                    function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                                ));
-                            }
-
-                            return $return;
-                        };
+                        $value = Closure::fromCallable($value);
                     }
 
                     if (! is_object($value) or ! $value instanceof Closure) {
