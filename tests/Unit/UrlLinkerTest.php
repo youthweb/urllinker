@@ -160,35 +160,22 @@ class UrlLinkerTest extends TestCase
     }
 
     /**
-     * Test that getHtmlLinkCreator() allways returns a closure
-     *
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testGetHtmlLinkCreator(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $this->assertInstanceOf(\Closure::class, $urlLinker->getHtmlLinkCreator());
-    }
-
-    /**
      * Test that a closure can be set
-     *
-     * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testSetHtmlLinkCreator(): void
+    public function testSettingHtmlLinkCreator(): void
     {
-        $urlLinker = new UrlLinker();
-
         // Simple htmlLinkCreator
         $creator = function ($url, $content) {
             return '<a href="' . $url . '">' . $content . '</a>';
         };
 
-        $urlLinker->setHtmlLinkCreator($creator);
+        $urlLinker = new UrlLinker([
+            'htmlLinkCreator' => $creator,
+        ]);
 
-        // Test that getHtmlLinkCreator() returns allways a closure
-        $this->assertSame($creator, $urlLinker->getHtmlLinkCreator());
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(true);
     }
 
     /**

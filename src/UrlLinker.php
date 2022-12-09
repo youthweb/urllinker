@@ -216,35 +216,6 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
      */
-    public function setHtmlLinkCreator(Closure $creator): self
-    {
-        @trigger_error(sprintf(
-            '"%s()" is deprecated since version 1.1 and will be removed in 2.0. Use config setting through "%s" instead.',
-            __METHOD__,
-            __CLASS__ . '::__construct()'
-        ), \E_USER_DEPRECATED);
-
-        $this->htmlLinkCreator = $creator;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated since version 1.1, to be set to private in 2.0.
-     */
-    public function getHtmlLinkCreator(): Closure
-    {
-        @trigger_error(sprintf(
-            '"%s()" is deprecated since version 1.1 and will be removed in 2.0, don\'t use it anymore.',
-            __METHOD__
-        ), \E_USER_DEPRECATED);
-
-        return $this->htmlLinkCreator;
-    }
-
-    /**
-     * @deprecated since version 1.1, to be set to private in 2.0. Use config setting through __construct() instead
-     */
     public function setEmailLinkCreator(Closure $creator): self
     {
         @trigger_error(sprintf(

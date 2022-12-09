@@ -9,10 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
-- **BREAKING** The method `Youthweb\UrlLinker\UrlLinker::getAllowFtpAddresses()` was removed
-- **BREAKING** The method `Youthweb\UrlLinker\UrlLinker::setAllowFtpAddresses()` was removed
-- **BREAKING** The method `Youthweb\UrlLinker\UrlLinker::getAllowUpperCaseUrlSchemes()` was removed
-- **BREAKING** The method `Youthweb\UrlLinker\UrlLinker::setAllowUpperCaseUrlSchemes()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getAllowFtpAddresses()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setAllowFtpAddresses()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getAllowUpperCaseUrlSchemes()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setAllowUpperCaseUrlSchemes()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getHtmlLinkCreator()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setHtmlLinkCreator()` was removed
 
 ## [1.5.0](https://github.com/youthweb/urllinker/compare/1.4.0...1.5.0) - 2022-12-07
 
