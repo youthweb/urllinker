@@ -21,7 +21,6 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Integration;
 
-use PHPUnit\Framework\Error\Deprecated;
 use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerTest extends \PHPUnit\Framework\TestCase
@@ -96,7 +95,6 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
         return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
     }
 
-
     /**
      * Test the default EmailLinkCreator
      */
@@ -170,29 +168,6 @@ class UrlLinkerTest extends \PHPUnit\Framework\TestCase
      */
     public function customEmailLinkCreatorCallable(string $email, string $content): string {
         return '<a href="' . $email . '" class="email">' . $content . '</a>';
-    }
-
-    /**
-     * Test a custom EmailLinkCreator not returning a string will casted to string
-     */
-    public function testCustomEmailLinkCreatorNotReturningString(): void
-    {
-        $urlLinker = new UrlLinker([
-            'emailLinkCreator' => function($email, $content) { return 123; },
-        ]);
-
-        $this->expectDeprecation();
-        $this->expectDeprecationMessage('Return value of Closure for "emailLinkCreator" returns type "integer" and will be casted to "string". This is deprecated since version 1.5.1 and will throw an "UnexpectedValueException" in version 2.0, return "string" instead.');
-
-        $oldErrorHandler = set_error_handler(function ($errno, $errstr, $errline, $errfile) {
-            if ($errno & \E_USER_DEPRECATED) {
-                throw new Deprecated((string) $errstr, (int) $errno, (string) $errfile, (int) $errline);
-            }
-        });
-
-        $urlLinker->linkUrlsInTrustedHtml('Email: mail@example.com');
-
-        set_error_handler($oldErrorHandler);
     }
 
     /**

@@ -431,10 +431,20 @@ final class UrlLinker implements UrlLinkerInterface
                     $completeUrl = $scheme ? $url : "http://$url";
                     $linkText = "$domain$port$path";
 
-                    $htmlLinkCreator = $this->htmlLinkCreator;
+                    $htmlLink = $this->htmlLinkCreator->__invoke($completeUrl, $linkText);
+
+                    if (! is_string($htmlLink)) {
+                        @trigger_error(sprintf(
+                            'Return value of Closure for "%s" returns type "%s" and will be casted to "string". This is deprecated since version 1.5.1 and will throw an "UnexpectedValueException" in version 2.0, return "string" instead.',
+                            'htmlLinkCreator',
+                            gettype($htmlLink)
+                        ), \E_USER_DEPRECATED);
+
+                        $htmlLink = (string) $htmlLink;
+                    }
 
                     // Add the hyperlink.
-                    $html .= $htmlLinkCreator($completeUrl, $linkText);
+                    $html .= $htmlLink;
                 }
             } else {
                 // Not a valid URL.
