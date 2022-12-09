@@ -3,6 +3,7 @@
 [![Latest Version](https://img.shields.io/github/release/youthweb/urllinker.svg)](https://github.com/youthweb/urllinker/releases)
 [![Software License](https://img.shields.io/badge/license-GPL3-brightgreen.svg)](LICENSE.md)
 [![Build Status](https://github.com/youthweb/urllinker/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/youthweb/urllinker/actions)
+[![codecov](https://codecov.io/gh/youthweb/urllinker/branch/main/graph/badge.svg?token=0ygzSgvUfU)](https://codecov.io/gh/youthweb/urllinker)
 [![Total Downloads](https://img.shields.io/packagist/dt/youthweb/urllinker.svg)](https://packagist.org/packages/youthweb/urllinker)
 
 UrlLinker converts any web addresses in plain text into HTML hyperlinks.
