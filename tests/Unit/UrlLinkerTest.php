@@ -179,35 +179,22 @@ class UrlLinkerTest extends TestCase
     }
 
     /**
-     * Test that getEmailLinkCreator() allways returns a closure
-     *
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testGetEmailLinkCreator(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $this->assertInstanceOf(\Closure::class, $urlLinker->getEmailLinkCreator());
-    }
-
-    /**
      * Test that a closure can be set
-     *
-     * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testSetEmailLinkCreator(): void
+    public function testSettingEmailLinkCreator(): void
     {
-        $urlLinker = new UrlLinker();
-
         // Simple emailLinkCreator
         $creator = function ($email, $content) {
             return '<a href="mailto:' . $email . '">' . $content . '</a>';
         };
 
-        $urlLinker->setEmailLinkCreator($creator);
+        $urlLinker = new UrlLinker([
+            'emailLinkCreator' => $creator,
+        ]);
 
-        // Test that getEmailLinkCreator() returns allways a closure
-        $this->assertSame($creator, $urlLinker->getEmailLinkCreator());
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(true);
     }
 
     public function testNotAllowingFtpAddresses(): void

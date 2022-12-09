@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setAllowUpperCaseUrlSchemes()` was removed
 - **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getHtmlLinkCreator()` was removed
 - **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setHtmlLinkCreator()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getEmailLinkCreator()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setEmailLinkCreator()` was removed
 
 ## [1.5.0](https://github.com/youthweb/urllinker/compare/1.4.0...1.5.0) - 2022-12-07
 
