@@ -35,9 +35,6 @@ class UrlLinkerTest extends TestCase
         $urlLinker = new UrlLinker();
 
         $this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', $urlLinker);
-
-        // @deprecated since version 1.1, to be removed in 2.0.
-        $this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
     }
 
     /**
@@ -151,20 +148,6 @@ class UrlLinkerTest extends TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testAllowUpperCaseUrlSchemesConfig(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
-
-        $urlLinker->setAllowUpperCaseUrlSchemes(true);
-
-        $this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());
-    }
-
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
     public function testValidTldsConfig(): void
     {
         $urlLinker = new UrlLinker();
@@ -240,16 +223,30 @@ class UrlLinkerTest extends TestCase
         $this->assertSame($creator, $urlLinker->getEmailLinkCreator());
     }
 
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testAllowingUpperCaseSchemes(): void
+    public function testNotAllowingUpperCaseSchemes(): void
     {
-        $urlLinker = new UrlLinker();
-        $urlLinker->setAllowUpperCaseUrlSchemes(true);
+        $urlLinker = new UrlLinker([
+            'allowUpperCaseUrlSchemes' => false,
+        ]);
         $urlLinker->setValidTlds(['.com' => true]);
 
-        $this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());
+        $text = '<div>HTTP://example.com</div>';
+        $expectedText = '&lt;div&gt;HTTP://<a href="http://example.com">example.com</a>&lt;/div&gt;';
+
+        $this->assertSame($expectedText, $urlLinker->linkUrlsAndEscapeHtml($text));
+
+        $html = '<div>HTTP://example.com</div>';
+        $expectedHtml = '<div>HTTP://<a href="http://example.com">example.com</a></div>';
+
+        $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
+    }
+
+    public function testAllowingUpperCaseSchemes(): void
+    {
+        $urlLinker = new UrlLinker([
+            'allowUpperCaseUrlSchemes' => true,
+        ]);
+        $urlLinker->setValidTlds(['.com' => true]);
 
         $text = '<div>HTTP://example.com</div>';
         $expectedText = '&lt;div&gt;<a href="HTTP://example.com">example.com</a>&lt;/div&gt;';
