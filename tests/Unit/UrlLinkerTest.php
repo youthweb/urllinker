@@ -37,8 +37,6 @@ class UrlLinkerTest extends TestCase
         $this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', $urlLinker);
 
         // @deprecated since version 1.1, to be removed in 2.0.
-        $this->assertFalse($urlLinker->getAllowFtpAddresses());
-        // @deprecated since version 1.1, to be removed in 2.0.
         $this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
     }
 
@@ -153,20 +151,6 @@ class UrlLinkerTest extends TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testAllowFtpAddressesConfig(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $this->assertFalse($urlLinker->getAllowFtpAddresses());
-
-        $urlLinker->setAllowFtpAddresses(true);
-
-        $this->assertTrue($urlLinker->getAllowFtpAddresses());
-    }
-
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
     public function testAllowUpperCaseUrlSchemesConfig(): void
     {
         $urlLinker = new UrlLinker();
@@ -259,36 +243,12 @@ class UrlLinkerTest extends TestCase
     /**
      * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testAllowingFtpAddresses(): void
-    {
-        $urlLinker = new UrlLinker();
-        $urlLinker->setAllowFtpAddresses(true);
-        $urlLinker->setValidTlds(['.com' => true]);
-
-        $this->assertTrue($urlLinker->getAllowFtpAddresses());
-        $this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
-
-        $text = '<div>ftp://example.com</div>';
-        $expectedText = '&lt;div&gt;<a href="ftp://example.com">example.com</a>&lt;/div&gt;';
-
-        $this->assertSame($expectedText, $urlLinker->linkUrlsAndEscapeHtml($text));
-
-        $html = '<div>ftp://example.com</div>';
-        $expectedHtml = '<div><a href="ftp://example.com">example.com</a></div>';
-
-        $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
-    }
-
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
     public function testAllowingUpperCaseSchemes(): void
     {
         $urlLinker = new UrlLinker();
         $urlLinker->setAllowUpperCaseUrlSchemes(true);
         $urlLinker->setValidTlds(['.com' => true]);
 
-        $this->assertFalse($urlLinker->getAllowFtpAddresses());
         $this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());
 
         $text = '<div>HTTP://example.com</div>';

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/youthweb/urllinker/compare/1.5.0...main)
 
+### Removed
+
+- **BREAKING** The method `Youthweb\UrlLinker\UrlLinker::getAllowFtpAddresses()` was removed
+- **BREAKING** The method `Youthweb\UrlLinker\UrlLinker::setAllowFtpAddresses()` was removed
+
 ## [1.5.0](https://github.com/youthweb/urllinker/compare/1.4.0...1.5.0) - 2022-12-07
 
 ### Added
