@@ -21,8 +21,11 @@ declare(strict_types=1);
 
 namespace Youthweb\UrlLinker\Tests\Unit;
 
+use ArrayIterator;
+use EmptyIterator;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Youthweb\UrlLinker\UrlLinker;
 
 class UrlLinkerTest extends TestCase
@@ -30,243 +33,142 @@ class UrlLinkerTest extends TestCase
     /**
      * @test UrlLinker implements UrlLinkerInterface
      */
-    public function testItImplementsUrlLinkerInterface(): void
+    public function testUrlLinkerImplementsUrlLinkerInterface(): void
     {
         $urlLinker = new UrlLinker();
 
         $this->assertInstanceOf('Youthweb\UrlLinker\UrlLinkerInterface', $urlLinker);
-
-        // @deprecated since version 1.1, to be removed in 2.0.
-        $this->assertFalse($urlLinker->getAllowFtpAddresses());
-        // @deprecated since version 1.1, to be removed in 2.0.
-        $this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
     }
 
-    /**
-     * @test UrlLinker throws Exception with wrong htmlLinkCreator
-     */
-    public function throwExceptionWithWrongHtmllinkcreator(): void
+    public function testProvidingClosureAsHtmlLinkCreator(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "string" given.');
-
-        $config = [
-            'htmlLinkCreator' => 'this must be a Closure',
-        ];
-
-        $urlLinker = new UrlLinker($config);
-    }
-
-    /**
-     * @test UrlLinker throws Exception with wrong emailLinkCreator
-     */
-    public function throwExceptionWithWrongEmaillinkcreator(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Option "emailLinkCreator" must be of type "Closure", "string" given.');
-
-        $config = [
-            'emailLinkCreator' => 'this must be a Closure',
-        ];
-
-        $urlLinker = new UrlLinker($config);
-    }
-
-    /**
-     * @test Closures are allowed as htmlLinkCreator
-     */
-    public function allowClosureAsHtmllinkcreator(): void
-    {
-        $config = [
-            'htmlLinkCreator' => function (): void {
-            },
-        ];
-
-        $urlLinker = new UrlLinker($config);
+        new UrlLinker([
+            'htmlLinkCreator' => function (): void {},
+        ]);
 
         // Workaround to test that NO Exception is thrown
         // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
-        );
+        $this->assertTrue(true);
     }
 
     /**
-     * @test Closures are allowed as emailLinkCreator
-     */
-    public function allowClosureAsEmaillinkcreator(): void
-    {
-        $config = [
-            'emailLinkCreator' => function (): void {
-            },
-        ];
-
-        $urlLinker = new UrlLinker($config);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
-        );
-    }
-
-    /**
-     * @test Callables are allowed as htmlLinkCreator
-     */
-    public function allowCallableAsHtmllinkcreator(): void
-    {
-        $config = [
-            'htmlLinkCreator' => [$this, '__construct'],
-        ];
-
-        $urlLinker = new UrlLinker($config);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
-        );
-    }
-
-    /**
-     * @test Callables are allowed as emailLinkCreator
-     */
-    public function allowCallableAsEmaillinkcreator(): void
-    {
-        $config = [
-            'emailLinkCreator' => [$this, '__construct'],
-        ];
-
-        $urlLinker = new UrlLinker($config);
-
-        // Workaround to test that NO Exception is thrown
-        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
-        $this->assertTrue(
-            true,
-            'Return type ensures this assertion is never reached on failure'
-        );
-    }
-
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testAllowFtpAddressesConfig(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $this->assertFalse($urlLinker->getAllowFtpAddresses());
-
-        $urlLinker->setAllowFtpAddresses(true);
-
-        $this->assertTrue($urlLinker->getAllowFtpAddresses());
-    }
-
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testAllowUpperCaseUrlSchemesConfig(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
-
-        $urlLinker->setAllowUpperCaseUrlSchemes(true);
-
-        $this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());
-    }
-
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testValidTldsConfig(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $domains = ['.com' => true, '.org' => true];
-
-        $urlLinker->setValidTlds($domains);
-
-        $this->assertSame($domains, $urlLinker->getValidTlds());
-    }
-
-    /**
-     * Test that getHtmlLinkCreator() allways returns a closure
+     * @dataProvider wrongCreatorProvider
      *
-     * @deprecated since version 1.1, to be removed in 2.0.
+     * @param mixed $wrongCreator
      */
-    public function testGetHtmlLinkCreator(): void
+    public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
     {
-        $urlLinker = new UrlLinker();
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "');
 
-        $this->assertInstanceOf(\Closure::class, $urlLinker->getHtmlLinkCreator());
+        new UrlLinker([
+            'htmlLinkCreator' => $wrongCreator,
+        ]);
+
+    }
+
+    public function testProvidingClosureAsEmailLinkCreator(): void
+    {
+        new UrlLinker([
+            'emailLinkCreator' => function (): void {},
+        ]);
+
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @dataProvider wrongCreatorProvider
+     *
+     * @param mixed $wrongCreator
+     */
+    public function testWrongEmailLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "emailLinkCreator" must be of type "Closure", "');
+
+        new UrlLinker([
+            'emailLinkCreator' => $wrongCreator,
+        ]);
+    }
+
+    public function testSettingValidTldsConfig(): void
+    {
+        new UrlLinker([
+            'validTlds' => ['.com' => true, '.org' => true],
+        ]);
+
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(
+            true,
+            'Return type ensures this assertion is never reached on failure'
+        );
     }
 
     /**
      * Test that a closure can be set
-     *
-     * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testSetHtmlLinkCreator(): void
+    public function testSettingHtmlLinkCreator(): void
     {
-        $urlLinker = new UrlLinker();
-
         // Simple htmlLinkCreator
         $creator = function ($url, $content) {
             return '<a href="' . $url . '">' . $content . '</a>';
         };
 
-        $urlLinker->setHtmlLinkCreator($creator);
+        $urlLinker = new UrlLinker([
+            'htmlLinkCreator' => $creator,
+        ]);
 
-        // Test that getHtmlLinkCreator() returns allways a closure
-        $this->assertSame($creator, $urlLinker->getHtmlLinkCreator());
-    }
-
-    /**
-     * Test that getEmailLinkCreator() allways returns a closure
-     *
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
-    public function testGetEmailLinkCreator(): void
-    {
-        $urlLinker = new UrlLinker();
-
-        $this->assertInstanceOf(\Closure::class, $urlLinker->getEmailLinkCreator());
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(true);
     }
 
     /**
      * Test that a closure can be set
-     *
-     * @deprecated since version 1.1, to be removed in 2.0.
      */
-    public function testSetEmailLinkCreator(): void
+    public function testSettingEmailLinkCreator(): void
     {
-        $urlLinker = new UrlLinker();
-
         // Simple emailLinkCreator
         $creator = function ($email, $content) {
             return '<a href="mailto:' . $email . '">' . $content . '</a>';
         };
 
-        $urlLinker->setEmailLinkCreator($creator);
+        $urlLinker = new UrlLinker([
+            'emailLinkCreator' => $creator,
+        ]);
 
-        // Test that getEmailLinkCreator() returns allways a closure
-        $this->assertSame($creator, $urlLinker->getEmailLinkCreator());
+        // Workaround to test that NO Exception is thrown
+        // @see https://github.com/sebastianbergmann/phpunit-documentation/issues/171
+        $this->assertTrue(true);
     }
 
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
+    public function testNotAllowingFtpAddresses(): void
+    {
+        $urlLinker = new UrlLinker([
+            'allowFtpAddresses' => false,
+            'validTlds' => ['.com' => true],
+        ]);
+
+        $text = '<div>ftp://example.com</div>';
+        $expectedText = '&lt;div&gt;ftp://<a href="http://example.com">example.com</a>&lt;/div&gt;';
+
+        $this->assertSame($expectedText, $urlLinker->linkUrlsAndEscapeHtml($text));
+
+        $html = '<div>ftp://example.com</div>';
+        $expectedHtml = '<div>ftp://<a href="http://example.com">example.com</a></div>';
+
+        $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
+    }
+
     public function testAllowingFtpAddresses(): void
     {
-        $urlLinker = new UrlLinker();
-        $urlLinker->setAllowFtpAddresses(true);
-        $urlLinker->setValidTlds(['.com' => true]);
-
-        $this->assertTrue($urlLinker->getAllowFtpAddresses());
-        $this->assertFalse($urlLinker->getAllowUpperCaseUrlSchemes());
+        $urlLinker = new UrlLinker([
+            'allowFtpAddresses' => true,
+            'validTlds' => ['.com' => true],
+        ]);
 
         $text = '<div>ftp://example.com</div>';
         $expectedText = '&lt;div&gt;<a href="ftp://example.com">example.com</a>&lt;/div&gt;';
@@ -279,17 +181,40 @@ class UrlLinkerTest extends TestCase
         $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
     }
 
-    /**
-     * @deprecated since version 1.1, to be removed in 2.0.
-     */
+    public function testProvidingAllowingFtpAddressesNotAsBooleanThrowsInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "allowFtpAddresses" must be of type "boolean", "string" given.');
+
+        new UrlLinker([
+            'allowFtpAddresses' => 'true',
+        ]);
+    }
+
+    public function testNotAllowingUpperCaseSchemes(): void
+    {
+        $urlLinker = new UrlLinker([
+            'allowUpperCaseUrlSchemes' => false,
+            'validTlds' => ['.com' => true],
+        ]);
+
+        $text = '<div>HTTP://example.com</div>';
+        $expectedText = '&lt;div&gt;HTTP://<a href="http://example.com">example.com</a>&lt;/div&gt;';
+
+        $this->assertSame($expectedText, $urlLinker->linkUrlsAndEscapeHtml($text));
+
+        $html = '<div>HTTP://example.com</div>';
+        $expectedHtml = '<div>HTTP://<a href="http://example.com">example.com</a></div>';
+
+        $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
+    }
+
     public function testAllowingUpperCaseSchemes(): void
     {
-        $urlLinker = new UrlLinker();
-        $urlLinker->setAllowUpperCaseUrlSchemes(true);
-        $urlLinker->setValidTlds(['.com' => true]);
-
-        $this->assertFalse($urlLinker->getAllowFtpAddresses());
-        $this->assertTrue($urlLinker->getAllowUpperCaseUrlSchemes());
+        $urlLinker = new UrlLinker([
+            'allowUpperCaseUrlSchemes' => true,
+            'validTlds' => ['.com' => true],
+        ]);
 
         $text = '<div>HTTP://example.com</div>';
         $expectedText = '&lt;div&gt;<a href="HTTP://example.com">example.com</a>&lt;/div&gt;';
@@ -301,4 +226,113 @@ class UrlLinkerTest extends TestCase
 
         $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
     }
+
+    public function testProvidingAllowingUpperCaseSchemesNotAsBooleanThrowsInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "allowUpperCaseUrlSchemes" must be of type "boolean", "string" given.');
+
+        new UrlLinker([
+            'allowUpperCaseUrlSchemes' => 'true',
+        ]);
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    public function wrongCreatorProvider(): array
+    {
+        return $this->getAllExcept(['closure']);
+    }
+
+    /**
+	 * Retrieve an array in data provider format with a selection of all typical PHP data types
+	 * *except* the named types specified in the $except parameter.
+     *
+     * @see https://github.com/WordPress/Requests/pull/710
+	 *
+	 * @param string[] ...$except One or more arrays containing the names of the types to exclude.
+	 *
+	 * @return array<string,mixed>
+	 */
+	private function getAllExcept(array ...$except) {
+		$except = array_flip(array_merge(...$except));
+
+		return array_diff_key($this->getAll(), $except);
+	}
+
+    /**
+	 * Retrieve an array in data provider format with all typical PHP data types.
+     *
+     * @see https://github.com/WordPress/Requests/pull/710
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function getAll() {
+		return [
+			'null' => [
+				'input' => null,
+			],
+			'boolean false' => [
+				'input' => false,
+			],
+			'boolean true' => [
+				'input' => true,
+			],
+			'integer 0' => [
+				'input' => 0,
+			],
+			'negative integer' => [
+				'input' => -123,
+			],
+			'positive integer' => [
+				'input' => 786687,
+			],
+			'float 0.0' => [
+				'input' => 0.0,
+			],
+			'negative float' => [
+				'input' => 5.600e-3,
+			],
+			'positive float' => [
+				'input' => 124.7,
+			],
+			'empty string' => [
+				'input' => '',
+			],
+			'numeric string' => [
+				'input' => '123',
+			],
+			'textual string' => [
+				'input' => 'foobar',
+			],
+			'textual string starting with numbers' => [
+				'input' => '123 My Street',
+			],
+			'empty array' => [
+				'input' => [],
+			],
+			'array with values, no keys' => [
+				'input' => [1, 2, 3],
+			],
+			'array with values, string keys' => [
+				'input' => ['a' => 1, 'b' => 2],
+			],
+			'callable as array with instanciated object' => [
+				'input' => [$this, '__construct'],
+			],
+			'closure' => [
+				'input' => function() { return true; },
+			],
+			'plain object' => [
+				'input' => new stdClass(),
+			],
+			'ArrayIterator object' => [
+				'input' => new ArrayIterator([1, 2, 3]),
+			],
+			'Iterator object, no array access' => [
+				'input' => new EmptyIterator(),
+			],
+		];
+	}
 }

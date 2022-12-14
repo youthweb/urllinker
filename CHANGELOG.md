@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/youthweb/urllinker/compare/1.5.0...main)
 
+### Changed
+
+- **BREAKING** Return type `string` was added to method `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsAndEscapeHtml()`.
+- **BREAKING** Return type `string` was added to method `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsInTrustedHtml()`.
+
+### Removed
+
+- **BREAKING** The deprecated support for `callable` in the config option `htmlLinkCreator` was removed, provide `Closure` instead
+- **BREAKING** The deprecated support for `callable` in the config option `emailLinkCreator` was removed, provide `Closure` instead
+- **BREAKING** The deprecated support for non-boolean in the config option `allowFtpAddresses` was removed, provide `boolean` instead
+- **BREAKING** The deprecated support for non-boolean in the config option `allowUpperCaseUrlSchemes` was removed, provide `boolean` instead
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getAllowFtpAddresses()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setAllowFtpAddresses()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getAllowUpperCaseUrlSchemes()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setAllowUpperCaseUrlSchemes()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getHtmlLinkCreator()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setHtmlLinkCreator()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getEmailLinkCreator()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setEmailLinkCreator()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::getValidTlds()` was removed
+- **BREAKING** The deprecated method `Youthweb\UrlLinker\UrlLinker::setValidTlds()` was removed
+
 ## [1.5.0](https://github.com/youthweb/urllinker/compare/1.4.0...1.5.0) - 2022-12-07
 
 ### Added

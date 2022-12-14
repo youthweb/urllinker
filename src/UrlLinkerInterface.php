@@ -28,12 +28,12 @@ interface UrlLinkerInterface
      *
      * @return string
      */
-    public function linkUrlsAndEscapeHtml(string $text)/* : string */;
+    public function linkUrlsAndEscapeHtml(string $text): string;
 
     /**
      * @param string $html
      *
      * @return string
      */
-    public function linkUrlsInTrustedHtml(string $html)/* : string */;
+    public function linkUrlsInTrustedHtml(string $html): string;
 }
