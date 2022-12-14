@@ -177,6 +177,16 @@ class UrlLinkerTest extends TestCase
         $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
     }
 
+    public function testProvidingAllowingFtpAddressesNotAsBooleanThrowsInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "allowFtpAddresses" must be of type "boolean", "string" given.');
+
+        new UrlLinker([
+            'allowFtpAddresses' => 'true',
+        ]);
+    }
+
     public function testNotAllowingUpperCaseSchemes(): void
     {
         $urlLinker = new UrlLinker([
@@ -211,6 +221,16 @@ class UrlLinkerTest extends TestCase
         $expectedHtml = '<div><a href="HTTP://example.com">example.com</a></div>';
 
         $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
+    }
+
+    public function testProvidingAllowingUpperCaseSchemesNotAsBooleanThrowsInvalidArgumentException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "allowUpperCaseUrlSchemes" must be of type "boolean", "string" given.');
+
+        new UrlLinker([
+            'allowUpperCaseUrlSchemes' => 'true',
+        ]);
     }
 
     /**

@@ -79,12 +79,12 @@ final class UrlLinker implements UrlLinkerInterface
                     }
 
                     if (! is_bool($value)) {
-                        @trigger_error(sprintf(
-                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
-                            $key
-                        ), \E_USER_DEPRECATED);
-
-                        $value = (bool) $value;
+                        throw new InvalidArgumentException(sprintf(
+                            'Option "%s" must be of type "%s", "%s" given.',
+                            $key,
+                            'boolean',
+                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                        ));
                     }
 
                     $this->allowFtpAddresses = $value;
@@ -99,12 +99,12 @@ final class UrlLinker implements UrlLinkerInterface
                     }
 
                     if (! is_bool($value)) {
-                        @trigger_error(sprintf(
-                            'Providing option "%s" not as type "boolean" is deprecated since version 1.5 and will not casted in version 2.0, provide as "boolean" instead.',
-                            $key
-                        ), \E_USER_DEPRECATED);
-
-                        $value = (bool) $value;
+                        throw new InvalidArgumentException(sprintf(
+                            'Option "%s" must be of type "%s", "%s" given.',
+                            $key,
+                            'boolean',
+                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                        ));
                     }
 
                     $this->allowUpperCaseUrlSchemes = $value;
