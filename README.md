@@ -44,14 +44,20 @@ $config = [
         return '<a href="' . $url . '" target="_blank">' . $content . '</a>';
     },
 
+    // ..or add a callable as a Closure to modify the way the urls will be linked:
+    'htmlLinkCreator' => [$class, 'linkCreator'](...),
+
     // Add a Closure to modify the way the emails will be linked:
     'emailLinkCreator' => function(string $email, string $content): string
     {
         return '<a href="mailto:' . $email . '" class="email">' . $content . '</a>';
     },
 
-    // You can also disable the links for email with a closure:
-    'emailLinkCreator' => function(string $email, string $content): string { return $email; },
+    // ... or add a callable as a Closure to modify the way the emails will be linked:
+    'emailLinkCreator' => \Closure::fromCallable('callableFunction'),
+
+    // ... or you can also disable the links for email with a closure:
+    'emailLinkCreator' => fn (string $email, string $content): string => $email,
 
     // You can customize the recognizable Top Level Domains:
     'validTlds' => ['.localhost' => true],
