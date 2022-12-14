@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased](https://github.com/youthweb/urllinker/compare/1.5.0...main)
 
+### Changed
+
+- Return type `string` was added to method `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsAndEscapeHtml()`.
+- Return type `string` was added to method `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsInTrustedHtml()`.
+
 ### Removed
 
 - **BREAKING** The deprecated support for `callable` in the config option `htmlLinkCreator` was removed, provide `Closure` instead
