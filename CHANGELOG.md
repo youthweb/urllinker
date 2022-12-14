@@ -5,10 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/youthweb/urllinker/compare/1.5.1...main)
+## [Unreleased](https://github.com/youthweb/urllinker/compare/2.0.0...main)
+
+## [2.0.0](https://github.com/youthweb/urllinker/compare/1.5.1...2.0.0) - 2022-12-14
 
 ### Changed
 
+- UrlLinker is now fully typed.
 - **BREAKING** Return type `string` was added to method `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsAndEscapeHtml()`.
 - **BREAKING** Return type `string` was added to method `Youthweb\UrlLinker\UrlLinkerInterface::linkUrlsInTrustedHtml()`.
 
