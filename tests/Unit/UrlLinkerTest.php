@@ -80,6 +80,8 @@ class UrlLinkerTest extends TestCase
 
     /**
      * @dataProvider wrongCreatorProvider
+     *
+     * @param mixed $wrongCreator
      */
     public function testWrongEmailLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
     {
