@@ -43,7 +43,8 @@ class UrlLinkerTest extends TestCase
     public function testProvidingClosureAsHtmlLinkCreator(): void
     {
         new UrlLinker([
-            'htmlLinkCreator' => function (): void {},
+            'htmlLinkCreator' => function (): void {
+            },
         ]);
 
         // Workaround to test that NO Exception is thrown
@@ -64,13 +65,13 @@ class UrlLinkerTest extends TestCase
         new UrlLinker([
             'htmlLinkCreator' => $wrongCreator,
         ]);
-
     }
 
     public function testProvidingClosureAsEmailLinkCreator(): void
     {
         new UrlLinker([
-            'emailLinkCreator' => function (): void {},
+            'emailLinkCreator' => function (): void {
+            },
         ]);
 
         // Workaround to test that NO Exception is thrown
@@ -246,93 +247,97 @@ class UrlLinkerTest extends TestCase
     }
 
     /**
-	 * Retrieve an array in data provider format with a selection of all typical PHP data types
-	 * *except* the named types specified in the $except parameter.
+     * Retrieve an array in data provider format with a selection of all typical PHP data types
+     * *except* the named types specified in the $except parameter.
      *
      * @see https://github.com/WordPress/Requests/pull/710
-	 *
-	 * @param string[] ...$except One or more arrays containing the names of the types to exclude.
-	 *
-	 * @return array<string,mixed>
-	 */
-	private function getAllExcept(array ...$except) {
-		$except = array_flip(array_merge(...$except));
+     *
+     * @param string[] ...$except One or more arrays containing the names of the types to exclude.
+     *
+     * @return array<string,mixed>
+     */
+    private function getAllExcept(array ...$except)
+    {
+        $except = array_flip(array_merge(...$except));
 
-		return array_diff_key($this->getAll(), $except);
-	}
+        return array_diff_key($this->getAll(), $except);
+    }
 
     /**
-	 * Retrieve an array in data provider format with all typical PHP data types.
+     * Retrieve an array in data provider format with all typical PHP data types.
      *
      * @see https://github.com/WordPress/Requests/pull/710
-	 *
-	 * @return array<string, mixed>
-	 */
-	private function getAll() {
-		return [
-			'null' => [
-				'input' => null,
-			],
-			'boolean false' => [
-				'input' => false,
-			],
-			'boolean true' => [
-				'input' => true,
-			],
-			'integer 0' => [
-				'input' => 0,
-			],
-			'negative integer' => [
-				'input' => -123,
-			],
-			'positive integer' => [
-				'input' => 786687,
-			],
-			'float 0.0' => [
-				'input' => 0.0,
-			],
-			'negative float' => [
-				'input' => 5.600e-3,
-			],
-			'positive float' => [
-				'input' => 124.7,
-			],
-			'empty string' => [
-				'input' => '',
-			],
-			'numeric string' => [
-				'input' => '123',
-			],
-			'textual string' => [
-				'input' => 'foobar',
-			],
-			'textual string starting with numbers' => [
-				'input' => '123 My Street',
-			],
-			'empty array' => [
-				'input' => [],
-			],
-			'array with values, no keys' => [
-				'input' => [1, 2, 3],
-			],
-			'array with values, string keys' => [
-				'input' => ['a' => 1, 'b' => 2],
-			],
-			'callable as array with instanciated object' => [
-				'input' => [$this, '__construct'],
-			],
-			'closure' => [
-				'input' => function() { return true; },
-			],
-			'plain object' => [
-				'input' => new stdClass(),
-			],
-			'ArrayIterator object' => [
-				'input' => new ArrayIterator([1, 2, 3]),
-			],
-			'Iterator object, no array access' => [
-				'input' => new EmptyIterator(),
-			],
-		];
-	}
+     *
+     * @return array<string, mixed>
+     */
+    private function getAll()
+    {
+        return [
+            'null' => [
+                'input' => null,
+            ],
+            'boolean false' => [
+                'input' => false,
+            ],
+            'boolean true' => [
+                'input' => true,
+            ],
+            'integer 0' => [
+                'input' => 0,
+            ],
+            'negative integer' => [
+                'input' => -123,
+            ],
+            'positive integer' => [
+                'input' => 786687,
+            ],
+            'float 0.0' => [
+                'input' => 0.0,
+            ],
+            'negative float' => [
+                'input' => 5.600e-3,
+            ],
+            'positive float' => [
+                'input' => 124.7,
+            ],
+            'empty string' => [
+                'input' => '',
+            ],
+            'numeric string' => [
+                'input' => '123',
+            ],
+            'textual string' => [
+                'input' => 'foobar',
+            ],
+            'textual string starting with numbers' => [
+                'input' => '123 My Street',
+            ],
+            'empty array' => [
+                'input' => [],
+            ],
+            'array with values, no keys' => [
+                'input' => [1, 2, 3],
+            ],
+            'array with values, string keys' => [
+                'input' => ['a' => 1, 'b' => 2],
+            ],
+            'callable as array with instanciated object' => [
+                'input' => [$this, '__construct'],
+            ],
+            'closure' => [
+                'input' => function () {
+                    return true;
+                },
+            ],
+            'plain object' => [
+                'input' => new stdClass(),
+            ],
+            'ArrayIterator object' => [
+                'input' => new ArrayIterator([1, 2, 3]),
+            ],
+            'Iterator object, no array access' => [
+                'input' => new EmptyIterator(),
+            ],
+        ];
+    }
 }
