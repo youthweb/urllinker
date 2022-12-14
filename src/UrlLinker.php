@@ -74,17 +74,17 @@ final class UrlLinker implements UrlLinkerInterface
                 case 'allowFtpAddresses':
                     if (array_key_exists($key, $options)) {
                         $value = $options[$key];
+
+                        if (! is_bool($value)) {
+                            throw new InvalidArgumentException(sprintf(
+                                'Option "%s" must be of type "%s", "%s" given.',
+                                $key,
+                                'boolean',
+                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                            ));
+                        }
                     } else {
                         $value = false;
-                    }
-
-                    if (! is_bool($value)) {
-                        throw new InvalidArgumentException(sprintf(
-                            'Option "%s" must be of type "%s", "%s" given.',
-                            $key,
-                            'boolean',
-                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                        ));
                     }
 
                     $this->allowFtpAddresses = $value;
@@ -94,17 +94,17 @@ final class UrlLinker implements UrlLinkerInterface
                 case 'allowUpperCaseUrlSchemes':
                     if (array_key_exists($key, $options)) {
                         $value = $options[$key];
+
+                        if (! is_bool($value)) {
+                            throw new InvalidArgumentException(sprintf(
+                                'Option "%s" must be of type "%s", "%s" given.',
+                                $key,
+                                'boolean',
+                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                            ));
+                        }
                     } else {
                         $value = false;
-                    }
-
-                    if (! is_bool($value)) {
-                        throw new InvalidArgumentException(sprintf(
-                            'Option "%s" must be of type "%s", "%s" given.',
-                            $key,
-                            'boolean',
-                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                        ));
                     }
 
                     $this->allowUpperCaseUrlSchemes = $value;
@@ -114,19 +114,17 @@ final class UrlLinker implements UrlLinkerInterface
                 case 'htmlLinkCreator':
                     if (array_key_exists($key, $options)) {
                         $value = $options[$key];
-                    } else {
-                        $value = function ($url, $content) {
-                            return $this->createHtmlLink($url, $content);
-                        };
-                    }
 
-                    if (! is_object($value) or ! $value instanceof Closure) {
-                        throw new InvalidArgumentException(sprintf(
-                            'Option "%s" must be of type "%s", "%s" given.',
-                            $key,
-                            Closure::class,
-                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                        ));
+                        if (! is_object($value) or ! $value instanceof Closure) {
+                            throw new InvalidArgumentException(sprintf(
+                                'Option "%s" must be of type "%s", "%s" given.',
+                                $key,
+                                Closure::class,
+                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                            ));
+                        }
+                    } else {
+                        $value = Closure::fromCallable([$this, 'createHtmlLink']);
                     }
 
                     $this->htmlLinkCreator = $value;
@@ -136,19 +134,17 @@ final class UrlLinker implements UrlLinkerInterface
                 case 'emailLinkCreator':
                     if (array_key_exists($key, $options)) {
                         $value = $options[$key];
-                    } else {
-                        $value = function ($url, $content) {
-                            return $this->createEmailLink($url, $content);
-                        };
-                    }
 
-                    if (! is_object($value) or ! $value instanceof Closure) {
-                        throw new InvalidArgumentException(sprintf(
-                            'Option "%s" must be of type "%s", "%s" given.',
-                            $key,
-                            Closure::class,
-                            function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
-                        ));
+                        if (! is_object($value) or ! $value instanceof Closure) {
+                            throw new InvalidArgumentException(sprintf(
+                                'Option "%s" must be of type "%s", "%s" given.',
+                                $key,
+                                Closure::class,
+                                function_exists('get_debug_type') ? get_debug_type($value) : (is_object($value) ? get_class($value) : gettype($value))
+                            ));
+                        }
+                    } else {
+                        $value = Closure::fromCallable([$this, 'createEmailLink']);
                     }
 
                     $this->emailLinkCreator = $value;
@@ -319,7 +315,7 @@ final class UrlLinker implements UrlLinkerInterface
     /**
      * @return string
      */
-    private function buildRegex()
+    private function buildRegex(): string
     {
         /**
          * Regular expression bits used by linkUrlsAndEscapeHtml() to match URLs.
@@ -352,12 +348,9 @@ final class UrlLinker implements UrlLinkerInterface
     }
 
     /**
-     * @param string $url
-     * @param string $content
-     *
-     * @return string
+     * Default method for creating a HTML link
      */
-    private function createHtmlLink($url, $content)
+    private function createHtmlLink(string $url, string $content): string
     {
         $link = sprintf(
             '<a href="%s">%s</a>',
@@ -370,12 +363,9 @@ final class UrlLinker implements UrlLinkerInterface
     }
 
     /**
-     * @param string $url
-     * @param string $content
-     *
-     * @return string
+     * Default method for creating an email link
      */
-    private function createEmailLink($url, $content)
+    private function createEmailLink(string $url, string $content): string
     {
         $link = $this->createHtmlLink("mailto:$url", $content);
 
@@ -383,12 +373,7 @@ final class UrlLinker implements UrlLinkerInterface
         return str_replace('@', '&#64;', $link);
     }
 
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
-    private function escapeHtml($string)
+    private function escapeHtml(string $string): string
     {
         $flags = ENT_COMPAT | ENT_HTML401;
         $encoding = ini_get('default_charset');
