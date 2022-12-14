@@ -53,8 +53,10 @@ class UrlLinkerTest extends TestCase
 
     /**
      * @dataProvider wrongCreatorProvider
+     *
+     * @param mixed $wrongCreator
      */
-    public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException(mixed $wrongCreator): void
+    public function testWrongHtmlLinkCreatorThrowsInvalidArgumentException($wrongCreator): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Option "htmlLinkCreator" must be of type "Closure", "');
